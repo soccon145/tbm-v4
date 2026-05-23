@@ -1,26 +1,169 @@
 @import "tailwindcss";
 
+/* ─── EG Brand Tokens ──────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Oxblood / deep burgundy — headline, CTA, accents */
+  --crimson:        #7A1C23;
+  --crimson-deep:   #5C1319;
+  --crimson-tint:   rgba(122,28,35,0.05);
+  --crimson-border: rgba(122,28,35,0.16);
+
+  /* Ivory paper — warm white, not yellow */
+  --cream:          #FAF9F6;
+  --cream-mid:      #F0EDE7;
+  --cream-lighter:  #F6F4F0;
+
+  /* Muted gold — lines, dividers only */
+  --gold:           #B5A47E;
+
+  /* Olive/sage — herbal accent, use sparingly */
+  --olive:          #6B7355;
+
+  /* Text — charcoal/deep brown, NOT pure black */
+  --dark:           #261E14;
+  --dark-deeper:    #1A120A;
+  --text-mid:       #4A3728;
+  --text-muted:     #7D6854;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ─── Base ─────────────────────────────────────────────────── */
+html { font-size: 16px; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  font-family: 'Montserrat', 'Be Vietnam Pro', sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  /* Subtle paper grain via SVG noise */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
+}
+
+* { box-sizing: border-box; }
+
+/* ─── Typography ────────────────────────────────────────────── */
+.font-display { font-family: 'Cormorant Garamond', Georgia, serif; }
+
+/* ─── Brand Components ──────────────────────────────────────── */
+.eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--crimson);
+}
+
+.eyebrow-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow-line::before,
+.eyebrow-line::after {
+  content: '';
+  flex: 0 0 40px;
+  height: 1px;
+  background: var(--crimson);
+  opacity: 0.4;
+}
+
+.card {
+  background: var(--cream-lighter);
+  border: 1px solid rgba(181,164,126,0.25);
+}
+
+.card-crimson {
+  background: rgba(122,28,35,0.04);
+  border: 1px solid rgba(122,28,35,0.12);
+}
+
+.diamond::before { content: '◆ '; color: var(--crimson); }
+.accent { font-style: italic; color: var(--crimson); }
+
+.watermark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  font-weight: 300;
+  color: rgba(138,24,32,0.12);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ─── Progress bar ──────────────────────────────────────────── */
+.bar-track {
+  height: 6px;
+  background: var(--cream-mid);
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--crimson);
+  transition: width 600ms ease-out;
+}
+
+/* ─── Animations ────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.screen-fade-in { animation: fadeUp 600ms ease both; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+.loading-pulse { animation: pulse 2.4s ease-in-out infinite; }
+
+/* ─── Buttons ───────────────────────────────────────────────── */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 18px 24px;
+  background: var(--crimson);
+  color: #fff;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-align: center;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 220ms;
+}
+.btn-primary:hover  { background: var(--crimson-deep); }
+.btn-primary:active { transform: scale(0.985); }
+
+.btn-outline {
+  display: block;
+  width: 100%;
+  padding: 13px 24px;
+  background: transparent;
+  color: var(--crimson);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: center;
+  border: 1px solid var(--crimson-border);
+  cursor: pointer;
+  transition: background 200ms;
+}
+.btn-outline:hover { background: var(--crimson-tint); }
+
+/* ─── Print ─────────────────────────────────────────────────── */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
+}
+
+/* ─── Shareable result card ─────────────────────────────────── */
+#result-card {
+  background: var(--cream-lighter);
+  max-width: 390px;
+  width: 100%;
 }
