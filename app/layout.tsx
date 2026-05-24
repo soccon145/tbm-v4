@@ -18,8 +18,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Bài Test Thể Tạng — Elisabeth's Garden",
-  description: "Khám phá thể tạng của bạn theo Đông y. Bài test 5 phút, câu trả lời cá nhân hoá.",
+  title: "Bài Test Thể Trạng — Elisabeth's Garden",
+  description: "Khám phá thể trạng của bạn theo Đông y. Bài test 5 phút, câu trả lời cá nhân hoá.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

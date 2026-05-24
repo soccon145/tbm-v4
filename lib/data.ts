@@ -187,7 +187,7 @@ export const THE_CONTENT: Record<TheKey, TheInfo> = {
     yeuTo: ["Di truyền","Hệ miễn dịch “quá nhạy”","Môi trường sống"],
     foods_rec: ["Thực phẩm quen thuộc, đã biết là “hợp”","Thức ăn nấu chín kỹ","Rau xanh sạch","Thịt cá tươi, nguồn rõ ràng","Cháo, canh nhẹ"],
     foods_avoid: ["Hải sản lạ (nếu cơ địa nhạy cảm)","Đồ ăn chế biến sẵn","Thực phẩm nhiều phụ gia","Đồ ăn lạ chưa từng thử","Rượu bia"],
-    analysis: "Đặc Bẩm là thể tạng bẩm sinh, cơ thể nhạy cảm từ nền tảng gene và cấu trúc. Không phải bệnh, mà là một cách cơ thể vận hành khác biệt: phản ứng nhanh hơn, mạnh hơn với tác nhân bên ngoài. Quản lý Đặc Bẩm là nghệ thuật tránh kích thích chứ không phải chữa khỏi.",
+    analysis: "Đặc Bẩm là thể trạng bẩm sinh, cơ thể nhạy cảm từ nền tảng gene và cấu trúc. Không phải bệnh, mà là một cách cơ thể vận hành khác biệt: phản ứng nhanh hơn, mạnh hơn với tác nhân bên ngoài. Quản lý Đặc Bẩm là nghệ thuật tránh kích thích chứ không phải chữa khỏi.",
     strengths: ["Đặc Bẩm thường đi kèm trực giác cơ thể tốt, bạn biết mình cần gì","Khi tìm được môi trường phù hợp, cơ thể bạn hoạt động rất ổn định","Nhạy cảm không phải điểm yếu, nhiều người Đặc Bẩm có sức đề kháng tốt khi được quản lý đúng"],
     insights: ["Đặc Bẩm không 'chữa được', nhưng có thể quản lý tốt đến mức gần như không ảnh hưởng chất lượng sống","Mỗi lần phản ứng mạnh là cơ hội để biết thêm tác nhân cần tránh, ghi lại thành danh sách cá nhân","Chế độ ăn đơn giản, dễ kiểm soát thường hiệu quả hơn chế độ ăn 'siêu khoẻ' phức tạp cho Đặc Bẩm"],
     quote: "Cơ thể bạn nhạy cảm không phải là điểm yếu. Đó là cách nó bảo vệ bạn, hãy học cách làm việc cùng nó.",

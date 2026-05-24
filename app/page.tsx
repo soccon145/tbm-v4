@@ -209,14 +209,14 @@ function LandingScreen({ onStart }: { onStart: () => void }) {
         {/* Eyebrow with thin gold lines */}
         <div style={{ display:'flex', alignItems:'center', gap:'12px', marginBottom:'22px' }}>
           <div style={{ flex:1, height:'1px', background:'var(--gold)', opacity:0.7 }} />
-          <span className="eyebrow">Bài test thể tạng</span>
+          <span className="eyebrow">Bài test thể trạng</span>
           <div style={{ flex:1, height:'1px', background:'var(--gold)', opacity:0.7 }} />
         </div>
 
         {/* Giant headline — cascade */}
         <h1 style={{ fontFamily:'Cormorant Garamond, Georgia, serif', fontWeight:400, lineHeight:1.08, color:'var(--dark)', margin:'0', letterSpacing:'-0.01em' }}>
           <span style={{ display:'block', fontSize:'62px' }}>Khám phá</span>
-          <em style={{ display:'block', fontSize:'62px', color:'var(--crimson)' }}>thể tạng</em>
+          <em style={{ display:'block', fontSize:'62px', color:'var(--crimson)' }}>thể trạng</em>
           <span style={{ display:'block', fontSize:'62px' }}>của bạn</span>
           <em style={{ display:'block', fontSize:'52px', color:'var(--crimson)', lineHeight:1.15 }}>theo Đông y</em>
         </h1>
@@ -232,7 +232,7 @@ function LandingScreen({ onStart }: { onStart: () => void }) {
       <div style={{ padding:'0 24px', marginBottom:'30px' }}>
         {[
           { svg:<HerbIconSVG />, title:'Khoa học cá nhân hóa', desc:'Kết quả dựa trên triệu chứng thực của bạn, không phải generic.' },
-          { svg:<MortarIconSVG />, title:'Ritual phục hồi', desc:'Lộ trình cụ thể 7–90 ngày, cá nhân hoá theo thể tạng.' },
+          { svg:<MortarIconSVG />, title:'Ritual phục hồi', desc:'Lộ trình cụ thể 7–90 ngày, cá nhân hoá theo thể trạng.' },
           { svg:<FlowerIconSVG />, title:'Thảo mộc thuần khiết', desc:'Công thức từ kho tri thức Đông y hàng ngàn năm.' },
         ].map((b, i) => (
           <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:'16px', marginBottom: i < 2 ? '20px' : 0 }}>
@@ -255,8 +255,8 @@ function LandingScreen({ onStart }: { onStart: () => void }) {
         <p className="eyebrow" style={{ marginBottom:'22px' }}>Cách bài test hoạt động</p>
         {[
           'Trả lời 30–38 câu hỏi về triệu chứng cơ thể',
-          'Hệ thống đối chiếu với 9 thể tạng Đông y',
-          'Nhận kết quả thể tạng trội và tuổi cơ thể',
+          'Hệ thống đối chiếu với 9 thể trạng Đông y',
+          'Nhận kết quả thể trạng trội và tuổi cơ thể',
           'Xem lộ trình phục hồi cá nhân hóa',
         ].map((s, i) => (
           <div key={i} style={{ display:'flex', alignItems:'baseline', gap:'18px', paddingBottom:'16px', marginBottom:'16px', borderBottom: i < 3 ? '1px solid rgba(181,164,126,0.22)' : 'none' }}>
@@ -397,14 +397,14 @@ function IntroScreen({ userInfo, onStart }: { userInfo: UserInfo; onStart: () =>
       {/* Giải thích khái niệm — ngắn gọn, không jargon */}
       <div style={{ marginBottom:'24px', padding:'16px', background:'var(--cream-mid)', borderLeft:'3px solid rgba(122,28,35,0.25)' }}>
         <p style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.8, margin:0 }}>
-          Đông y gọi những tín hiệu này là <strong style={{ color:'var(--dark)' }}>thể tạng</strong> — trạng thái cơ thể đang vận hành. Không phải bệnh, không phải điểm số. Biết thể tạng của mình là biết <em style={{ color:'var(--crimson)' }}>tại sao</em> cơ thể phản ứng theo cách đó, và <em style={{ color:'var(--crimson)' }}>cần làm gì</em> để thay đổi.
+          Đông y gọi những tín hiệu này là <strong style={{ color:'var(--dark)' }}>thể trạng</strong> — trạng thái cơ thể đang vận hành. Không phải bệnh, không phải điểm số. Biết thể trạng của mình là biết <em style={{ color:'var(--crimson)' }}>tại sao</em> cơ thể phản ứng theo cách đó, và <em style={{ color:'var(--crimson)' }}>cần làm gì</em> để thay đổi.
         </p>
       </div>
 
       {/* 9 thể — preview có dẫn dắt */}
       <div style={{ marginBottom:'8px', display:'flex', alignItems:'center', gap:'10px' }}>
         <div style={{ flex:1, height:'1px', background:'var(--gold)', opacity:0.5 }} />
-        <p className="eyebrow" style={{ margin:0 }}>9 thể tạng trong Đông y</p>
+        <p className="eyebrow" style={{ margin:0 }}>9 thể trạng trong Đông y</p>
         <div style={{ flex:1, height:'1px', background:'var(--gold)', opacity:0.5 }} />
       </div>
       <p style={{ fontSize:'11px', color:'var(--text-muted)', textAlign:'center', marginBottom:'14px' }}>Bạn có nhận ra mình trong số này không?</p>
@@ -463,7 +463,7 @@ function TestScreen({ userInfo, onDone }: { userInfo: UserInfo; onDone: (answers
   const total = activeQs.length;
   const pct = Math.round((Math.min(currentIdx, total) / total) * 100);
 
-  // Tính thể tạng chính của câu hỏi hiện tại (thể có điểm cao nhất trong option nặng nhất)
+  // Tính thể trạng chính của câu hỏi hiện tại (thể có điểm cao nhất trong option nặng nhất)
   const primaryThe = (() => {
     if (!current) return '';
     const scores: Record<string, number> = {};
@@ -547,8 +547,8 @@ function TestScreen({ userInfo, onDone }: { userInfo: UserInfo; onDone: (answers
 function LoadingScreen({ name }: { name: string }) {
   const steps = [
     'Đang đọc những tín hiệu bạn vừa chia sẻ',
-    'Đối chiếu với khung 9 thể tạng Đông y',
-    'Phân tích thể tạng trội và thể tạng phụ',
+    'Đối chiếu với khung 9 thể trạng Đông y',
+    'Phân tích thể trạng trội và thể trạng phụ',
     `Soạn báo cáo riêng cho ${name}`,
   ];
   const [step, setStep] = useState(0);
@@ -712,7 +712,7 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
 
       {/* Bar chart all 9 thể */}
       <div className="card p-4 mb-6">
-        <p className="eyebrow mb-4">Phân bố thể tạng của bạn</p>
+        <p className="eyebrow mb-4">Phân bố thể trạng của bạn</p>
         <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
           {sorted.map(key => {
             const t = THE_CONTENT[key];
@@ -793,7 +793,7 @@ function RecipesSection({ recipes }: { recipes: Recipe[] }) {
     <div className="mb-6">
       <p className="eyebrow mb-1">30 Công thức nấu ăn</p>
       <p style={{ fontSize:'12px', color:'var(--text-muted)', marginBottom:'12px' }}>
-        Nguyên liệu dễ tìm, phù hợp thể tạng. Luôn ăn/uống ấm, không thêm đá.
+        Nguyên liệu dễ tìm, phù hợp thể trạng. Luôn ăn/uống ấm, không thêm đá.
       </p>
       {RECIPE_CATS.map(cat => {
         const catRecipes = recipes.filter(r => r.category === cat);
@@ -953,7 +953,7 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
       {/* 30 ngày */}
       <div className="card p-4 mb-6">
         <p className="eyebrow mb-3">30 ngày tiếp theo</p>
-        {['Thêm sản phẩm thảo mộc phù hợp thể tạng vào routine sáng','Tăng thời gian đi bộ lên 30 phút, 4–5 lần/tuần','Theo dõi 1 triệu chứng chính mỗi tuần, ghi chú thay đổi','Giữ nhịp ngủ: ngủ-thức cùng giờ mỗi ngày'].map((s,i)=>(
+        {['Thêm sản phẩm thảo mộc phù hợp thể trạng vào routine sáng','Tăng thời gian đi bộ lên 30 phút, 4–5 lần/tuần','Theo dõi 1 triệu chứng chính mỗi tuần, ghi chú thay đổi','Giữ nhịp ngủ: ngủ-thức cùng giờ mỗi ngày'].map((s,i)=>(
           <div key={i} className="flex gap-2 mb-2">
             <span style={{ color:'var(--crimson)', flexShrink:0 }}>◆</span>
             <span style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.5 }}>{s}</span>
@@ -965,7 +965,7 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
       <div className="mb-6">
         <p className="eyebrow mb-3">90 ngày phục hồi sâu</p>
         <p style={{ fontSize:'13px', color:'var(--text-muted)', lineHeight:1.7 }}>
-          Sau 90 ngày duy trì lộ trình, phần lớn thể tạng đều cải thiện đáng kể. Bạn có thể làm lại bài test để theo dõi tiến trình.
+          Sau 90 ngày duy trì lộ trình, phần lớn thể trạng đều cải thiện đáng kể. Bạn có thể làm lại bài test để theo dõi tiến trình.
         </p>
       </div>
 
@@ -990,7 +990,7 @@ function OfferScreen({ result, userInfo }: { result: ScoreResult; userInfo: User
   const [remaining] = useState(Math.floor(Math.random() * 8) + 12);
 
   const VALUES = [
-    { label:'Tài liệu thể tạng cá nhân', price:'1.800.000đ', bonus: false },
+    { label:'Tài liệu thể trạng cá nhân', price:'1.800.000đ', bonus: false },
     { label:'Hướng dẫn phục hồi chuyên sâu', price:'1.200.000đ', bonus: false },
     { label:`Mặt nạ thảo mộc ${info.name}`, price:'150.000đ', bonus: false },
     { label:'Báo cáo PDF cá nhân hoá', price:'Tặng kèm', bonus: true },
@@ -1002,7 +1002,7 @@ function OfferScreen({ result, userInfo }: { result: ScoreResult; userInfo: User
       <BrandHeader small />
 
       <div className="pt-4 pb-5 text-center">
-        <p className="eyebrow mb-2">Box thể tạng {info.name}</p>
+        <p className="eyebrow mb-2">Box thể trạng {info.name}</p>
         <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'30px', lineHeight:1.2 }}>
           Đặt riêng cho <em style={{ color:'var(--crimson)' }}>{userInfo.name}</em>
         </h2>
