@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
-/* ─── EG Brand Tokens ──────────────────────────────────────── */
+/* ─── EG Brand Tokens — đồng bộ với eg-boxset-catalog ───────── */
 :root {
-  /* Oxblood / deep burgundy — headline, CTA, accents */
-  --crimson:        #7A1C23;
-  --crimson-deep:   #5C1319;
-  --crimson-tint:   rgba(122,28,35,0.05);
-  --crimson-border: rgba(122,28,35,0.16);
+  /* Crimson — đúng tông trang boxset */
+  --crimson:        #8A1820;
+  --crimson-deep:   #681219;
+  --crimson-tint:   rgba(138,24,32,0.05);
+  --crimson-border: rgba(138,24,32,0.16);
 
-  /* Ivory paper — warm white, not yellow */
-  --cream:          #FAF9F6;
-  --cream-mid:      #F0EDE7;
-  --cream-lighter:  #F6F4F0;
+  /* Cream vàng ấm — đúng tông trang boxset */
+  --cream:          #F7ECD8;
+  --cream-mid:      #F0E4CA;
+  --cream-lighter:  #FBF4E6;
 
-  /* Muted gold — lines, dividers only */
-  --gold:           #B5A47E;
+  /* Gold — đúng tông trang boxset */
+  --gold:           #DCCFB4;
 
   /* Olive/sage — herbal accent, use sparingly */
   --olive:          #6B7355;
 
-  /* Text — charcoal/deep brown, NOT pure black */
-  --dark:           #261E14;
-  --dark-deeper:    #1A120A;
-  --text-mid:       #41301F;
-  --text-muted:     #6B5544;
+  /* Text — charcoal như boxset, giữ đủ đậm cho mobile */
+  --dark:           #282828;
+  --dark-deeper:    #1A1A1A;
+  --text-mid:       #434343;
+  --text-muted:     #6E5F4B;
 }
 
 /* ─── Responsive Type Scale ────────────────────────────────── */

@@ -1,98 +1,63 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import {
-  PRODUCTS, TEA_FLAVORS, PRODUCT_OPTIONS, REGISTER_ENDPOINT,
-  type LandingProduct,
-} from '../../lib/landing-data';
+import { PRODUCTS, TEA_FLAVORS, PRODUCT_OPTIONS, REGISTER_ENDPOINT } from '../../lib/landing-data';
 
-// ─── Brand header (đồng bộ với app test) ──────────────────────
-function BrandHeader() {
+// ─── Landing page Set Mix 30 Vị Trà — design đồng bộ eg-boxset-catalog ─
+// Trang chỉ nói về SET TRÀ. Form đăng ký vẫn gom 3 sản phẩm (1 link cho gọn theo yêu cầu khách).
+
+const CREAM = '#F7ECD8';
+const GOLD = '#DCCFB4';
+
+// ─── Logo emblem kiểu boxset: vòng tròn + tên giãn cách ───────
+function HeroLogo() {
   return (
-    <div style={{ textAlign: 'center', padding: '22px 24px 12px' }}>
-      <div style={{ width: '40px', height: '1px', background: 'var(--crimson)', margin: '0 auto 8px' }} />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-        <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '13px', color: 'var(--text-muted)' }}>◆</span>
-        <span style={{ fontSize: '9px', color: 'var(--text-muted)', letterSpacing: '0.25em', fontFamily: 'var(--font-cormorant)' }}>
-          Elisabeth&apos;s Garden
-        </span>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginBottom: '40px' }}>
+      <div style={{ width: '64px', height: '64px', borderRadius: '50%', border: `2px solid ${CREAM}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '30px', color: CREAM, fontWeight: 600, lineHeight: 1 }}>EG</span>
+      </div>
+      <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: '22px', fontWeight: 600, letterSpacing: '0.2em', color: CREAM, textTransform: 'uppercase' }}>
+        Elizabeth&apos;s Garden
+      </div>
+      <div style={{ fontSize: '9px', letterSpacing: '0.55em', color: GOLD, textTransform: 'uppercase' }}>
+        Dưỡng sinh <span style={{ opacity: 0.7, margin: '0 4px' }}>◆</span> Đông y
       </div>
     </div>
   );
 }
 
-// ─── Ảnh sản phẩm: render ảnh thật nếu có, placeholder nếu chưa ─
-function ImgSlot({ alt, ratio = '4 / 3', src }: { alt: string; ratio?: string; src?: string }) {
+// ─── Divider kim cương kiểu boxset ────────────────────────────
+function DiamondDivider({ onCrimson }: { onCrimson?: boolean }) {
+  const color = onCrimson ? GOLD : 'var(--crimson)';
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', margin: '28px 0' }}>
+      <div style={{ height: '1px', width: '60px', background: color, opacity: 0.5 }} />
+      <div style={{ width: '6px', height: '6px', background: color, transform: 'rotate(45deg)' }} />
+      <div style={{ height: '1px', width: '60px', background: color, opacity: 0.5 }} />
+    </div>
+  );
+}
+
+function ImgFrame({ src, alt, ratio = '1 / 1' }: { src?: string; alt: string; ratio?: string }) {
   if (src) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={src} alt={alt}
-        style={{ width: '100%', aspectRatio: ratio, objectFit: 'cover', display: 'block', background: 'var(--cream-mid)' }} />
+      <img src={src} alt={alt} style={{ width: '100%', aspectRatio: ratio, objectFit: 'cover', display: 'block', background: 'var(--cream-mid)' }} />
     );
   }
   return (
-    <div
-      style={{
-        width: '100%', aspectRatio: ratio, background: 'var(--cream-mid)',
-        border: '1px dashed var(--crimson-border)', display: 'flex',
-        alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
-        gap: '6px', color: 'var(--text-muted)', textAlign: 'center', padding: '12px',
-      }}
-    >
-      <span style={{ fontSize: '22px', opacity: 0.5 }}>◆</span>
-      <span style={{ fontSize: '11px', letterSpacing: '0.05em' }}>Ảnh: {alt}</span>
+    <div style={{ width: '100%', aspectRatio: ratio, background: 'var(--cream-mid)', border: '1px dashed var(--crimson-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontSize: '11px' }}>
+      Ảnh: {alt}
     </div>
   );
 }
 
-// ─── Card 1 sản phẩm trong phần combo ─────────────────────────
-function ProductCard({ p }: { p: LandingProduct }) {
-  return (
-    <div className="card" style={{ overflow: 'hidden', marginBottom: '16px' }}>
-      <ImgSlot src={p.images[0]?.src} alt={p.images[0]?.alt ?? p.name} ratio="16 / 10" />
-      <div style={{ padding: '16px 16px 18px' }}>
-        <p className="eyebrow" style={{ marginBottom: '6px' }}>{p.eyebrow}</p>
-        <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '22px', fontWeight: 600, color: 'var(--dark)', lineHeight: 1.2 }}>
-          {p.name}
-        </h3>
-        <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-mid)', lineHeight: 1.6, margin: '8px 0 12px' }}>
-          {p.tagline}
-        </p>
-        <div style={{ marginBottom: '12px' }}>
-          {p.bullets.map((b, i) => (
-            <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '5px' }}>
-              <span style={{ color: 'var(--crimson)', flexShrink: 0, fontSize: '12px' }}>◆</span>
-              <span style={{ fontSize: '13px', color: 'var(--text-mid)', lineHeight: 1.5 }}>{b}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', borderTop: '1px solid var(--gold)', paddingTop: '12px' }}>
-          <div>
-            <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '26px', fontWeight: 600, color: 'var(--crimson)' }}>
-              {p.price || 'Liên hệ'}
-            </span>
-            {p.priceNote && (
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>{p.priceNote}</div>
-            )}
-          </div>
-          {p.externalUrl && (
-            <a href={p.externalUrl} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: '12px', color: 'var(--crimson)', fontWeight: 600, textDecoration: 'underline', flexShrink: 0 }}>
-              Xem chi tiết →
-            </a>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Form đăng ký gom 3 sản phẩm ──────────────────────────────
+// ─── Form đăng ký gom 3 sản phẩm (1 link duy nhất) ────────────
 function RegisterForm() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
-  const [picked, setPicked] = useState<string[]>([]);
+  const [picked, setPicked] = useState<string[]>(['tra30']); // mặc định tick sẵn set trà
   const [note, setNote] = useState('');
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -122,7 +87,6 @@ function RegisterForm() {
       }
       setSent(true);
     } catch {
-      // vẫn hiển thị cảm ơn để không kẹt khách; đơn được giữ ở client
       setSent(true);
     } finally {
       setSending(false);
@@ -131,41 +95,33 @@ function RegisterForm() {
 
   if (sent) {
     return (
-      <div className="card-crimson" style={{ padding: '28px 20px', textAlign: 'center' }}>
-        <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: '40px', color: 'var(--crimson)', marginBottom: '8px' }}>✦</div>
-        <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '24px', marginBottom: '8px' }}>Cảm ơn {name.trim()}!</h3>
-        <p style={{ fontSize: '14px', color: 'var(--text-mid)', lineHeight: 1.6 }}>
-          Elisabeth&apos;s Garden đã nhận đăng ký của bạn.<br />
-          Bên mình sẽ liên hệ qua số <strong>{phone.trim()}</strong> để xác nhận đơn trong thời gian sớm nhất.
+      <div style={{ textAlign: 'center', padding: '36px 20px' }}>
+        <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: '44px', color: 'var(--crimson)', marginBottom: '10px' }}>✦</div>
+        <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '28px', marginBottom: '10px', color: 'var(--dark)' }}>Cảm ơn {name.trim()}!</h3>
+        <p style={{ fontSize: '14px', color: 'var(--text-mid)', lineHeight: 1.7 }}>
+          Elizabeth&apos;s Garden đã nhận đăng ký của bạn.<br />
+          Bên mình sẽ liên hệ qua số <strong>{phone.trim()}</strong> để xác nhận đơn sớm nhất.
         </p>
       </div>
     );
   }
 
   const inputStyle: React.CSSProperties = {
-    width: '100%', padding: '12px 14px', background: 'var(--cream)',
+    width: '100%', padding: '14px', background: 'var(--cream-lighter)',
     border: '1px solid var(--gold)', fontSize: '15px', outline: 'none',
-    color: 'var(--dark)', borderRadius: '2px', fontFamily: 'inherit',
+    color: 'var(--dark)', fontFamily: 'inherit',
   };
 
   return (
-    <div className="card" style={{ padding: '20px 18px 22px' }}>
-      <p className="eyebrow" style={{ marginBottom: '4px' }}>Đăng ký mua</p>
-      <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '24px', lineHeight: 1.2, marginBottom: '6px' }}>
-        Để lại thông tin, EG liên hệ bạn ngay
-      </h3>
-      <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px', lineHeight: 1.6 }}>
-        Chọn sản phẩm bạn quan tâm, bên mình sẽ gọi tư vấn và chốt đơn. Chưa cần thanh toán trước.
-      </p>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
+    <div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
         <input style={inputStyle} placeholder="Họ và tên *" value={name} onChange={e => setName(e.target.value)} />
         <input style={inputStyle} placeholder="Số điện thoại *" type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
         <input style={inputStyle} placeholder="Địa chỉ giao hàng" value={address} onChange={e => setAddress(e.target.value)} />
       </div>
 
-      <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
-        Sản phẩm quan tâm *
+      <p style={{ fontSize: '10px', fontWeight: 600, color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '10px' }}>
+        Sản phẩm bạn muốn đặt
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
         {PRODUCT_OPTIONS.map(o => {
@@ -173,15 +129,15 @@ function RegisterForm() {
           return (
             <button key={o.value} type="button" onClick={() => togglePick(o.value)}
               style={{
-                display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 14px',
-                background: on ? 'var(--crimson-tint)' : 'var(--cream)',
+                display: 'flex', alignItems: 'center', gap: '12px', padding: '13px 14px',
+                background: on ? 'var(--crimson-tint)' : 'var(--cream-lighter)',
                 border: `1px solid ${on ? 'var(--crimson)' : 'var(--gold)'}`,
-                cursor: 'pointer', textAlign: 'left', borderRadius: '2px',
+                cursor: 'pointer', textAlign: 'left',
               }}>
               <span style={{
-                width: '18px', height: '18px', flexShrink: 0, borderRadius: '2px',
+                width: '18px', height: '18px', flexShrink: 0,
                 border: `1px solid ${on ? 'var(--crimson)' : 'var(--text-muted)'}`,
-                background: on ? 'var(--crimson)' : 'transparent', color: '#fff',
+                background: on ? 'var(--crimson)' : 'transparent', color: CREAM,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px',
               }}>{on ? '✓' : ''}</span>
               <span style={{ fontSize: '14px', color: 'var(--dark)' }}>{o.label}</span>
@@ -190,19 +146,21 @@ function RegisterForm() {
         })}
       </div>
 
-      <textarea style={{ ...inputStyle, minHeight: '64px', resize: 'vertical', marginBottom: '16px' }}
+      <textarea style={{ ...inputStyle, minHeight: '60px', resize: 'vertical', marginBottom: '18px' }}
         placeholder="Ghi chú thêm (không bắt buộc)" value={note} onChange={e => setNote(e.target.value)} />
 
-      <button className="btn-primary" disabled={!valid || sending}
-        style={{ opacity: valid && !sending ? 1 : 0.5, cursor: valid && !sending ? 'pointer' : 'not-allowed' }}
-        onClick={submit}>
-        {sending ? 'Đang gửi…' : 'Gửi đăng ký →'}
+      <button onClick={submit} disabled={!valid || sending}
+        style={{
+          display: 'block', width: '100%', padding: '18px',
+          background: valid && !sending ? 'var(--crimson)' : 'rgba(138,24,32,0.35)',
+          color: CREAM, border: 'none', cursor: valid && !sending ? 'pointer' : 'not-allowed',
+          fontSize: '12px', fontWeight: 600, letterSpacing: '0.25em', textTransform: 'uppercase',
+        }}>
+        {sending ? 'Đang gửi…' : 'Gửi đăng ký'}
       </button>
-      {!valid && (
-        <p style={{ fontSize: '11px', color: 'var(--text-muted)', textAlign: 'center', marginTop: '8px' }}>
-          Vui lòng nhập tên, số điện thoại và chọn ít nhất 1 sản phẩm.
-        </p>
-      )}
+      <p style={{ fontSize: '11px', color: 'var(--text-muted)', textAlign: 'center', marginTop: '10px', lineHeight: 1.6 }}>
+        Một form duy nhất cho mọi sản phẩm EG. Chưa cần thanh toán, bên mình liên hệ tư vấn rồi mới chốt đơn.
+      </p>
     </div>
   );
 }
@@ -212,84 +170,138 @@ export default function SetTraLanding() {
   const tea = PRODUCTS.find(p => p.id === 'tra30')!;
 
   return (
-    <div className="screen-fade-in" style={{ maxWidth: '480px', margin: '0 auto', padding: '0 16px 56px' }}>
-      <BrandHeader />
+    <div style={{ background: 'var(--cream)' }}>
 
-      {/* ── Hero: Set 30 vị trà ── */}
-      <div style={{ textAlign: 'center', paddingTop: '8px' }}>
-        <p className="eyebrow" style={{ marginBottom: '12px' }}>{tea.eyebrow}</p>
-        <h1 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 'var(--fs-hero)', fontWeight: 500, color: 'var(--crimson)', lineHeight: 1.02 }}>
-          30 Ngày<br />30 Vị Trà
+      {/* ════ HERO — nền đỏ rượu, vòng tròn trang trí, chữ kem (vibe boxset) ════ */}
+      <section style={{
+        background: 'var(--crimson)',
+        backgroundImage: 'radial-gradient(ellipse at 80% 20%, rgba(104,18,25,0.8) 0%, transparent 60%), radial-gradient(ellipse at 10% 80%, rgba(40,40,40,0.5) 0%, transparent 50%)',
+        minHeight: '92vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        position: 'relative', overflow: 'hidden', padding: '64px 28px', textAlign: 'center',
+      }}>
+        {/* vòng tròn trang trí */}
+        <div style={{ position: 'absolute', top: '-18%', right: '-12%', width: '480px', height: '480px', borderRadius: '50%', border: '1px solid rgba(247,236,216,0.12)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '-28%', right: '-20%', width: '640px', height: '640px', borderRadius: '50%', border: '1px solid rgba(247,236,216,0.07)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-14%', left: '-12%', width: '380px', height: '380px', borderRadius: '50%', border: '50px solid rgba(104,18,25,0.5)', pointerEvents: 'none' }} />
+
+        <HeroLogo />
+
+        <div style={{ fontSize: '10px', letterSpacing: '0.4em', color: GOLD, textTransform: 'uppercase', marginBottom: '20px' }}>
+          Blind Box · Trà dưỡng sinh
+        </div>
+
+        <h1 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 'clamp(52px, 13vw, 96px)', fontWeight: 300, color: CREAM, lineHeight: 1.02, letterSpacing: '0.04em' }}>
+          30 Ngày
+          <em style={{ fontStyle: 'italic', color: GOLD, display: 'block' }}>30 Vị Trà</em>
         </h1>
-        <div style={{ height: '1px', background: 'var(--gold)', opacity: 0.5, margin: '16px auto 14px', width: '60%' }} />
-        <p style={{ fontSize: 'var(--fs-lead)', color: 'var(--text-mid)', fontStyle: 'italic', lineHeight: 1.6, padding: '0 8px' }}>
-          {tea.tagline}
+
+        <p style={{ fontSize: '13px', letterSpacing: '0.1em', color: 'rgba(247,236,216,0.75)', maxWidth: '440px', lineHeight: 2, marginTop: '22px' }}>
+          Mỗi sáng mở một gói trà, không biết trước vị nào. 30 ngày đổi vị không trùng,
+          thay cho đồ uống nhiều đường, nhẹ nhàng nuôi dưỡng cơ thể.
         </p>
-      </div>
 
-      <div style={{ margin: '20px 0' }}>
-        <ImgSlot src={tea.images[0]?.src} alt={tea.images[0]?.alt ?? 'Set mix 30 vị trà'} ratio="1 / 1" />
-      </div>
+        <DiamondDivider onCrimson />
 
-      <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-        <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '32px', fontWeight: 600, color: 'var(--crimson)' }}>{tea.price}</span>
-        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>{tea.priceNote}</div>
-      </div>
+        {/* giá kiểu boxset: serif lớn + badge kem */}
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '20px' }}>
+          <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: '56px', fontWeight: 600, color: CREAM, lineHeight: 1 }}>
+            <sup style={{ fontSize: '20px', verticalAlign: 'super' }}>₫</sup>240<sub style={{ fontSize: '18px' }}>.000</sub>
+          </div>
+          <div style={{ background: CREAM, color: 'var(--crimson)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', padding: '6px 14px', textTransform: 'uppercase', marginBottom: '8px' }}>
+            30 gói · 15 vị
+          </div>
+        </div>
 
-      <a href="#dang-ky" style={{ textDecoration: 'none' }}>
-        <span className="btn-primary" style={{ marginBottom: '28px', marginTop: '12px' }}>Đăng ký mua →</span>
-      </a>
+        <a href="#dang-ky"
+          style={{
+            display: 'inline-block', marginTop: '40px', padding: '17px 52px',
+            border: `1px solid ${CREAM}`, color: CREAM, textDecoration: 'none',
+            fontSize: '11px', fontWeight: 600, letterSpacing: '0.3em', textTransform: 'uppercase',
+          }}>
+          Đặt hộp trà
+        </a>
+      </section>
 
-      {/* ── Trong hộp có gì ── */}
-      <div style={{ marginBottom: '28px' }}>
-        <p className="eyebrow" style={{ marginBottom: '10px' }}>Trong hộp có gì</p>
-        <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-mid)', lineHeight: 1.6, marginBottom: '12px' }}>
-          30 gói trà túi lọc, gồm 15 vị khác nhau từ thanh nhẹ, ngọt dịu đến đậm vị thảo mộc.
-          Mỗi ngày một vị, đổi khẩu vị suốt 30 ngày.
-        </p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
+      {/* ════ Nội dung nền kem ════ */}
+      <div style={{ maxWidth: '480px', margin: '0 auto', padding: '56px 20px 64px' }}>
+
+        {/* Trong hộp có gì */}
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ fontSize: '10px', letterSpacing: '0.4em', color: 'var(--crimson)', textTransform: 'uppercase', fontWeight: 600 }}>
+            Trong hộp có gì
+          </p>
+          <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '34px', fontWeight: 400, color: 'var(--dark)', lineHeight: 1.2, margin: '12px 0' }}>
+            Một hộp, <em style={{ color: 'var(--crimson)' }}>mười lăm hương vị</em>
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--text-mid)', lineHeight: 1.9, maxWidth: '400px', margin: '0 auto' }}>
+            30 gói trà túi lọc HUA YI BEI tuyển chọn, gồm 15 vị từ thanh nhẹ, ngọt dịu đến đậm vị thảo mộc.
+            Mỗi ngày một gói, một bất ngờ nhỏ cho cơ thể.
+          </p>
+        </div>
+
+        <div style={{ margin: '28px 0' }}>
+          <ImgFrame src={tea.images[0]?.src} alt={tea.images[0]?.alt ?? 'Set trà'} ratio="1 / 1" />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '8px' }}>
+            <ImgFrame src={tea.images[1]?.src} alt={tea.images[1]?.alt ?? ''} />
+            <ImgFrame src={tea.images[2]?.src} alt={tea.images[2]?.alt ?? ''} />
+          </div>
+        </div>
+
+        {/* 15 vị */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', justifyContent: 'center' }}>
           {TEA_FLAVORS.map((t, i) => (
-            <span key={i} style={{ fontSize: '12px', background: 'var(--crimson-tint)', color: 'var(--text-mid)', padding: '5px 10px', borderRadius: '2px' }}>
+            <span key={i} style={{ fontSize: '12px', background: 'var(--cream-lighter)', border: '1px solid var(--gold)', color: 'var(--text-mid)', padding: '6px 12px' }}>
               {t}
             </span>
           ))}
         </div>
-        {tea.images.length > 1 && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-            {tea.images.slice(1, 3).map((im, i) => (
-              <ImgSlot key={i} src={im.src} alt={im.alt} ratio="1 / 1" />
-            ))}
-            {tea.images[3] && (
-              <div style={{ gridColumn: '1 / -1' }}>
-                <ImgSlot src={tea.images[3].src} alt={tea.images[3].alt} ratio="16 / 10" />
-              </div>
-            )}
+
+        <DiamondDivider />
+
+        {/* Vì sao bạn sẽ thích — 3 benefit kiểu boxset */}
+        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+          <p style={{ fontSize: '10px', letterSpacing: '0.4em', color: 'var(--crimson)', textTransform: 'uppercase', fontWeight: 600, marginBottom: '20px' }}>
+            Vì sao bạn sẽ thích
+          </p>
+        </div>
+        {[
+          { n: '01', t: 'Không bao giờ chán vị', d: 'Blind box 15 vị xoay vòng trong 30 gói. Hôm nay bạch trà lê tuyết, mai hồng trà nhân sâm, mốt ô long quýt xanh.' },
+          { n: '02', t: 'Thay đồ uống nhiều đường', d: 'Một thói quen nhỏ mỗi ngày: bớt một ly trà sữa, thêm một gói trà dưỡng sinh. Cơ thể nhẹ dần sau 30 ngày.' },
+          { n: '03', t: 'Túi lọc pha 30 giây', d: 'Không cần ấm chén cầu kỳ. Một gói, một ly nước nóng, để 3 phút là có ly trà ấm giữa ngày làm việc.' },
+        ].map(b => (
+          <div key={b.n} style={{ display: 'flex', gap: '18px', alignItems: 'flex-start', marginBottom: '24px' }}>
+            <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: '40px', fontWeight: 300, color: 'var(--crimson)', opacity: 0.45, lineHeight: 1, flexShrink: 0 }}>{b.n}</div>
+            <div>
+              <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: '21px', fontWeight: 600, color: 'var(--dark)', marginBottom: '4px' }}>{b.t}</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-mid)', lineHeight: 1.75 }}>{b.d}</div>
+            </div>
           </div>
-        )}
-      </div>
+        ))}
 
-      {/* ── Combo 3 sản phẩm ── */}
-      <div style={{ marginBottom: '24px' }}>
-        <div className="eyebrow-line" style={{ marginBottom: '6px', justifyContent: 'center' }}>
-          <span className="eyebrow">Trọn bộ dưỡng sinh</span>
+        <DiamondDivider />
+
+        {/* Form đăng ký — gom 3 sản phẩm trong 1 link */}
+        <div id="dang-ky" style={{ scrollMarginTop: '20px', textAlign: 'center' }}>
+          <p style={{ fontSize: '10px', letterSpacing: '0.4em', color: 'var(--crimson)', textTransform: 'uppercase', fontWeight: 600 }}>
+            Đăng ký mua
+          </p>
+          <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '32px', fontWeight: 400, color: 'var(--dark)', lineHeight: 1.2, margin: '12px 0 8px' }}>
+            Để lại thông tin,<br /><em style={{ color: 'var(--crimson)' }}>EG liên hệ bạn ngay</em>
+          </h2>
         </div>
-        <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-muted)', textAlign: 'center', lineHeight: 1.6, marginBottom: '18px' }}>
-          Kết hợp trà, dụng cụ và khoá học để chăm sóc cơ thể trọn vẹn hơn.
-        </p>
-        {PRODUCTS.map(p => <ProductCard key={p.id} p={p} />)}
-      </div>
-
-      {/* ── Form đăng ký ── */}
-      <div id="dang-ky" style={{ scrollMarginTop: '16px' }}>
-        <RegisterForm />
-      </div>
-
-      {/* ── Footer ── */}
-      <div style={{ textAlign: 'center', borderTop: '1px solid var(--gold)', marginTop: '28px', paddingTop: '16px' }}>
-        <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: '18px', color: 'var(--crimson)', fontStyle: 'italic', marginBottom: '6px' }}>
-          Elisabeth&apos;s Garden
+        <div style={{ marginTop: '20px', textAlign: 'left' }}>
+          <RegisterForm />
         </div>
-        <span className="eyebrow" style={{ fontSize: '8px', letterSpacing: '0.4em' }}>HIỂU MÌNH • YÊU MÌNH • SỐNG AN NHIÊN</span>
+
+        {/* Footer */}
+        <div style={{ textAlign: 'center', borderTop: '1px solid var(--gold)', marginTop: '48px', paddingTop: '20px' }}>
+          <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: '18px', color: 'var(--crimson)', fontStyle: 'italic', marginBottom: '6px' }}>
+            Elizabeth&apos;s Garden
+          </div>
+          <span style={{ fontSize: '8px', letterSpacing: '0.4em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
+            Hiểu mình • Yêu mình • Sống an nhiên
+          </span>
+        </div>
       </div>
     </div>
   );
