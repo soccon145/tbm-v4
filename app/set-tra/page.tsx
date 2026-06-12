@@ -56,6 +56,7 @@ function ImgFrame({ src, alt, ratio = '1 / 1' }: { src?: string; alt: string; ra
 function RegisterForm() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [picked, setPicked] = useState<string[]>(['tra30']); // mặc định tick sẵn set trà
   const [note, setNote] = useState('');
@@ -66,13 +67,14 @@ function RegisterForm() {
     setPicked(prev => prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v]);
 
   const phoneOk = phone.replace(/\D/g, '').length >= 9;
-  const valid = name.trim().length >= 2 && phoneOk && picked.length > 0;
+  const emailOk = /\S+@\S+\.\S+/.test(email);
+  const valid = name.trim().length >= 2 && phoneOk && emailOk && picked.length > 0;
 
   const submit = useCallback(async () => {
     if (!valid || sending) return;
     setSending(true);
     const payload = {
-      name: name.trim(), phone: phone.trim(), address: address.trim(),
+      name: name.trim(), phone: phone.trim(), email: email.trim(), address: address.trim(),
       products: picked.map(v => PRODUCT_OPTIONS.find(o => o.value === v)?.label ?? v).join(', '),
       note: note.trim(),
       time: new Date().toISOString(),
@@ -117,6 +119,7 @@ function RegisterForm() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
         <input style={inputStyle} placeholder="Họ và tên *" value={name} onChange={e => setName(e.target.value)} />
         <input style={inputStyle} placeholder="Số điện thoại *" type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+        <input style={inputStyle} placeholder="Email *" type="email" value={email} onChange={e => setEmail(e.target.value)} />
         <input style={inputStyle} placeholder="Địa chỉ giao hàng" value={address} onChange={e => setAddress(e.target.value)} />
       </div>
 
