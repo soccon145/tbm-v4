@@ -409,6 +409,7 @@ export interface OfferTarget {
   desc: string;
   price: string;
   url?: string; // link xem chi tiết (nếu có trang riêng)
+  img?: string; // ảnh/minh hoạ trong /public/images
 }
 
 export const OFFER_TARGETS: OfferTarget[] = [
@@ -419,6 +420,7 @@ export const OFFER_TARGETS: OfferTarget[] = [
     desc: 'Học cách chăm sóc cơ thể theo đúng thể trạng của bạn, mỗi ngày chỉ 15 phút.',
     price: 'Từ 299.000đ',
     url: 'https://minh-trang.vercel.app/duong-sinh',
+    img: '/images/khoa-hoc.svg',
   },
   {
     id: 'tcm',
@@ -427,6 +429,7 @@ export const OFFER_TARGETS: OfferTarget[] = [
     desc: 'Trọn bộ dụng cụ dưỡng sinh cho người mới: vỗ bát huyệt, gua sha, ngâm chân... Tặng kèm đệm ngải cứu điện.',
     price: '949.000đ',
     url: 'https://eg-boxset-catalog.vercel.app/',
+    img: '/images/tcm-set.svg',
   },
   {
     id: 'tra30',
@@ -435,6 +438,7 @@ export const OFFER_TARGETS: OfferTarget[] = [
     desc: 'Mỗi ngày một vị trà dưỡng sinh, 30 ngày đổi vị không trùng.',
     price: '240.000đ',
     url: '/set-tra',
+    img: '/images/blindbox/hero.png',
   },
 ];
 

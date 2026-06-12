@@ -1,0 +1,58 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Minh hoạ Khoá học 15 Phút Dưỡng Sinh — line art theo palette EG -->
+  <rect width="800" height="500" fill="#8A1820"/>
+  <rect width="800" height="500" fill="url(#shade)"/>
+  <defs>
+    <radialGradient id="shade" cx="80%" cy="15%" r="80%">
+      <stop offset="0%" stop-color="#681219" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#681219" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="14" y="14" width="772" height="472" fill="none" stroke="#DCCFB4" stroke-width="1" opacity="0.5"/>
+
+  <!-- vòng tròn trang trí -->
+  <circle cx="700" cy="60" r="170" fill="none" stroke="#F7ECD8" stroke-width="1" opacity="0.12"/>
+  <circle cx="700" cy="60" r="220" fill="none" stroke="#F7ECD8" stroke-width="1" opacity="0.07"/>
+  <circle cx="60" cy="450" r="130" fill="none" stroke="#681219" stroke-width="34" opacity="0.5"/>
+
+  <!-- đồng hồ 15 phút -->
+  <g transform="translate(255,225)" stroke="#F7ECD8" fill="none" stroke-width="3" stroke-linecap="round">
+    <circle cx="0" cy="0" r="86"/>
+    <circle cx="0" cy="0" r="78" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="0" x2="0" y2="-52"/>
+    <line x1="0" y1="0" x2="38" y2="22"/>
+    <circle cx="0" cy="0" r="4.5" fill="#F7ECD8" stroke="none"/>
+    <!-- vạch giờ -->
+    <line x1="0" y1="-86" x2="0" y2="-72" stroke="#DCCFB4"/>
+    <line x1="86" y1="0" x2="72" y2="0" stroke="#DCCFB4"/>
+    <line x1="0" y1="86" x2="0" y2="72" stroke="#DCCFB4"/>
+    <line x1="-86" y1="0" x2="-72" y2="0" stroke="#DCCFB4"/>
+    <!-- cung 15 phút màu gold -->
+    <path d="M 0 -86 A 86 86 0 0 1 86 0" stroke="#DCCFB4" stroke-width="6"/>
+  </g>
+
+  <!-- ly trà + hơi nước -->
+  <g transform="translate(545,250)" stroke="#F7ECD8" fill="none" stroke-width="3" stroke-linecap="round">
+    <path d="M -64 -20 L 64 -20 L 56 56 Q 54 70 38 70 L -38 70 Q -54 70 -56 56 Z"/>
+    <path d="M 64 -12 Q 102 -8 96 22 Q 92 46 58 46" />
+    <path d="M -26 -42 Q -18 -62 -26 -80" opacity="0.7" stroke-width="2.4"/>
+    <path d="M 2 -46 Q 10 -68 2 -88" opacity="0.7" stroke-width="2.4"/>
+    <path d="M 30 -42 Q 38 -62 30 -80" opacity="0.7" stroke-width="2.4"/>
+    <!-- lá trà nổi -->
+    <path d="M -16 6 Q -8 -2 0 6 Q -8 14 -16 6 Z" stroke-width="2" stroke="#DCCFB4"/>
+    <path d="M 14 18 Q 22 10 30 18 Q 22 26 14 18 Z" stroke-width="2" stroke="#DCCFB4"/>
+  </g>
+
+  <!-- chữ -->
+  <g text-anchor="middle" font-family="Georgia, 'Times New Roman', serif">
+    <text x="400" y="420" fill="#F7ECD8" font-size="40" font-style="italic">15 phút dưỡng sinh</text>
+    <text x="400" y="456" fill="#DCCFB4" font-size="15" letter-spacing="6">MỖI NGÀY · ĐÚNG TRÌNH TỰ</text>
+  </g>
+
+  <!-- divider kim cương -->
+  <g transform="translate(400,372)">
+    <line x1="-56" y1="0" x2="-12" y2="0" stroke="#DCCFB4" stroke-width="1" opacity="0.7"/>
+    <rect x="-4" y="-4" width="8" height="8" fill="#DCCFB4" transform="rotate(45)"/>
+    <line x1="12" y1="0" x2="56" y2="0" stroke="#DCCFB4" stroke-width="1" opacity="0.7"/>
+  </g>
+</svg>

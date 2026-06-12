@@ -1117,7 +1117,12 @@ function OfferScreen({ result, userInfo }: { result: ScoreResult; userInfo: User
       </div>
 
       {OFFER_TARGETS.map(t => (
-        <div key={t.id} className="card" style={{ padding:'16px', marginBottom:'12px' }}>
+        <div key={t.id} className="card" style={{ marginBottom:'12px', overflow:'hidden' }}>
+          {t.img && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={t.img} alt={t.name} style={{ width:'100%', aspectRatio:'16 / 9', objectFit:'cover', display:'block', background:'var(--cream-mid)' }} />
+          )}
+          <div style={{ padding:'16px' }}>
           <p className="eyebrow" style={{ fontSize:'9px', marginBottom:'4px' }}>{t.eyebrow}</p>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline', gap:'10px' }}>
             <h3 style={{ fontFamily:'var(--font-cormorant)', fontSize:'20px', fontWeight:600, color:'var(--dark)', lineHeight:1.2 }}>{t.name}</h3>
@@ -1130,6 +1135,7 @@ function OfferScreen({ result, userInfo }: { result: ScoreResult; userInfo: User
               Xem chi tiết →
             </a>
           )}
+          </div>
         </div>
       ))}
 
