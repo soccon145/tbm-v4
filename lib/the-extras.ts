@@ -423,7 +423,7 @@ export const OFFER_TARGETS: OfferTarget[] = [
   {
     id: 'tcm',
     eyebrow: 'Bộ dụng cụ',
-    name: 'Set TCM Basic for Beginner',
+    name: 'Bộ Dưỡng Sinh Nhập Môn',
     desc: 'Trọn bộ dụng cụ dưỡng sinh cho người mới: vỗ bát huyệt, gua sha, ngâm chân... Tặng kèm đệm ngải cứu điện.',
     price: '949.000đ',
     url: 'https://eg-boxset-catalog.vercel.app/',

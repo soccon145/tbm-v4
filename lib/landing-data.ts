@@ -64,7 +64,7 @@ export const PRODUCTS: LandingProduct[] = [
   {
     id: 'tcm',
     eyebrow: 'Bộ dụng cụ dưỡng sinh',
-    name: 'Set TCM Basic for Beginner',
+    name: 'Bộ Dưỡng Sinh Nhập Môn',
     tagline: 'Bộ dụng cụ dưỡng sinh cơ bản cho người mới bắt đầu chăm sóc cơ thể tại nhà mỗi ngày.',
     price: '949.000đ',
     priceNote: 'Tặng kèm Đệm ngải cứu điện khi mua set',
@@ -98,7 +98,7 @@ export const PRODUCTS: LandingProduct[] = [
 // ─── Form đăng ký ─────────────────────────────────────────────
 export const PRODUCT_OPTIONS = [
   { value: 'tra30', label: 'Set mix 30 vị trà (240.000đ)' },
-  { value: 'tcm', label: 'Set TCM Basic (949.000đ)' },
+  { value: 'tcm', label: 'Bộ Dưỡng Sinh Nhập Môn (949.000đ)' },
   { value: 'course', label: 'Khoá học 15 phút dưỡng sinh (từ 299.000đ)' },
 ];
 
