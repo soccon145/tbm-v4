@@ -6,6 +6,7 @@ import {
   type TheKey, type ScoreResult, type Recipe,
 } from '../lib/data';
 import { THE_EXTRAS, OFFER_TARGETS, REGISTER_URL, type TheProduct } from '../lib/the-extras';
+import { THE_THEORY } from '../lib/the-theory';
 
 // ─── Types ────────────────────────────────────────────────────
 type Screen = 'landing'|'infoform'|'intro'|'test'|'loading'|'report'|'roadmap'|'offer'|'thankyou';
@@ -576,6 +577,7 @@ function LoadingScreen({ name }: { name: string }) {
 // ─── Screen 6: Report ─────────────────────────────────────────
 function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userInfo: UserInfo; onNext: () => void }) {
   const info = THE_CONTENT[result.dominant];
+  const theory = THE_THEORY[result.dominant];
   const secInfo = result.secondary ? THE_CONTENT[result.secondary] : null;
   const bodyAge = computeBodyAge(userInfo.birthYear, result.dominant, result.secondary);
   const sm = result.symptomMatches[result.dominant];
@@ -705,10 +707,33 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
         Lưu kết quả để chia sẻ →
       </button>
 
-      {/* Analysis */}
-      <div className="mb-6">
-        <p className="eyebrow mb-3">Phân tích chuyên môn</p>
-        <p style={{ fontSize:'var(--fs-body)', lineHeight:1.8, color:'var(--text-mid)' }}>{info.analysis}</p>
+      {/* ── Hiểu về thể trạng của bạn — lý thuyết đầy đủ, trao giá trị trước ── */}
+      <div className="mb-8">
+        <p className="eyebrow mb-2">Hiểu về thể trạng của bạn</p>
+        <h3 style={{ fontFamily:'var(--font-cormorant)', fontSize:'24px', fontWeight:600, color:'var(--dark)', marginBottom:'12px' }}>
+          Thể {info.name} là gì?
+        </h3>
+        {theory.laGi.map((para, i) => (
+          <p key={i} style={{ fontSize:'var(--fs-body)', lineHeight:1.85, color:'var(--text-mid)', marginBottom:'12px' }}>{para}</p>
+        ))}
+      </div>
+
+      {/* ── Dấu hiệu nhận biết — kèm giải thích từng dấu hiệu ── */}
+      <div className="mb-8">
+        <h3 style={{ fontFamily:'var(--font-cormorant)', fontSize:'22px', fontWeight:600, color:'var(--dark)', marginBottom:'12px' }}>
+          {theory.signsTitle}
+        </h3>
+        {theory.signs.map((s, i) => (
+          <div key={i} style={{ marginBottom:'12px' }}>
+            <div style={{ display:'flex', gap:'8px', alignItems:'flex-start' }}>
+              <span style={{ color:'var(--crimson)', flexShrink:0, fontSize:'12px', marginTop:'3px' }}>◆</span>
+              <div>
+                <div style={{ fontSize:'14px', fontWeight:600, color:'var(--dark)', lineHeight:1.5 }}>{s.sign}</div>
+                <div style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.6 }}>{s.detail}</div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Bar chart all 9 thể */}
@@ -736,13 +761,23 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
         </div>
       </div>
 
-      {/* Vì sao bạn ở thể này (cấu trúc kết quả phần 1 theo feedback) */}
-      <div className="mb-6">
-        <p className="eyebrow mb-3">Vì sao bạn ở thể này</p>
-        {info.yeuTo.map((y, i) => (
-          <div key={i} className="card-crimson p-3 mb-2">
-            <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'20px', color:'var(--crimson)', marginRight:'8px', fontWeight:600 }}>{i+1}</span>
-            <span style={{ fontSize:'13px', color:'var(--text-mid)' }}>{y}</span>
+      {/* ── Vì sao bạn ở thể này — nguyên nhân kèm phân tích cặn kẽ ── */}
+      <div className="mb-8">
+        <h3 style={{ fontFamily:'var(--font-cormorant)', fontSize:'22px', fontWeight:600, color:'var(--dark)', marginBottom:'6px' }}>
+          {theory.causesTitle}
+        </h3>
+        {theory.causesIntro && (
+          <p style={{ fontSize:'13px', color:'var(--text-muted)', fontStyle:'italic', lineHeight:1.6, marginBottom:'12px' }}>{theory.causesIntro}</p>
+        )}
+        {theory.causes.map((c, i) => (
+          <div key={i} className="card-crimson" style={{ padding:'12px 14px', marginBottom:'8px' }}>
+            <div style={{ display:'flex', gap:'10px', alignItems:'flex-start' }}>
+              <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'20px', color:'var(--crimson)', fontWeight:600, flexShrink:0, lineHeight:1.2 }}>{i+1}</span>
+              <div>
+                <div style={{ fontSize:'14px', fontWeight:600, color:'var(--dark)', marginBottom:'3px' }}>{c.title}</div>
+                <div style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.6 }}>{c.detail}</div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
@@ -901,6 +936,7 @@ function ProductSuggestions({ title, items }: { title: string; items: TheProduct
 function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; userInfo: UserInfo; onConsent: (yes: boolean) => void }) {
   const info = THE_CONTENT[result.dominant];
   const extras = THE_EXTRAS[result.dominant];
+  const theory = THE_THEORY[result.dominant];
 
   return (
     <div className="screen-fade-in max-w-md mx-auto px-4 pb-12">
@@ -929,7 +965,10 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
 
       {/* Ăn gì / Tránh gì */}
       <div className="card p-4 mb-6">
-        <p className="eyebrow mb-3">Chế độ ăn cho thể {info.name}</p>
+        <p className="eyebrow mb-2">Chế độ ăn cho thể {info.name}</p>
+        <p style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.6, marginBottom:'14px' }}>
+          <strong style={{ color:'var(--crimson)' }}>Nguyên tắc cốt lõi:</strong> {theory.nguyenTacAn}
+        </p>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px' }}>
           <div>
             <div style={{ fontSize:'11px', fontWeight:600, color:'#2d6a4f', marginBottom:'8px', textTransform:'uppercase', letterSpacing:'0.1em' }}>Nên ăn</div>
@@ -950,6 +989,20 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Mẹo thực tế áp dụng hàng ngày */}
+      <div className="mb-6">
+        <p className="eyebrow mb-3">Mẹo thực tế áp dụng hàng ngày</p>
+        {theory.meo.map((m, i) => (
+          <div key={i} style={{ display:'flex', gap:'8px', marginBottom:'10px', alignItems:'flex-start' }}>
+            <span style={{ color:'var(--crimson)', flexShrink:0, fontSize:'12px', marginTop:'3px' }}>◆</span>
+            <div>
+              <span style={{ fontSize:'13px', fontWeight:600, color:'var(--dark)' }}>{m.title}: </span>
+              <span style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.6 }}>{m.detail}</span>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Sản phẩm EG gợi ý cho mục ĂN */}
