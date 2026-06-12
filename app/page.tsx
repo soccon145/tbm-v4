@@ -215,12 +215,12 @@ function LandingScreen({ onStart }: { onStart: () => void }) {
 
         {/* Giant headline — cascade */}
         <h1 style={{ fontFamily:'Cormorant Garamond, Georgia, serif', fontWeight:400, lineHeight:1.08, color:'var(--dark)', margin:'0', letterSpacing:'-0.01em' }}>
-          <span style={{ display:'block', fontSize:'62px' }}>Khám phá</span>
-          <em style={{ display:'block', fontSize:'62px', color:'var(--crimson)' }}>thể trạng</em>
-          <span style={{ display:'block', fontSize:'62px' }}>của bạn</span>
-          <em style={{ display:'block', fontSize:'52px', color:'var(--crimson)', lineHeight:1.15 }}>theo Đông y</em>
+          <span style={{ display:'block', fontSize:'var(--fs-hero)' }}>Khám phá</span>
+          <em style={{ display:'block', fontSize:'var(--fs-hero)', color:'var(--crimson)' }}>thể trạng</em>
+          <span style={{ display:'block', fontSize:'var(--fs-hero)' }}>của bạn</span>
+          <em style={{ display:'block', fontSize:'var(--fs-hero)', color:'var(--crimson)', lineHeight:1.15 }}>theo Đông y</em>
         </h1>
-        <p style={{ fontFamily:'Cormorant Garamond, Georgia, serif', fontSize:'26px', fontStyle:'italic', color:'var(--text-muted)', fontWeight:400, lineHeight:1.3, margin:'4px 0 0' }}>
+        <p style={{ fontFamily:'Cormorant Garamond, Georgia, serif', fontSize:'var(--fs-lead)', fontStyle:'italic', color:'var(--text-muted)', fontWeight:400, lineHeight:1.3, margin:'4px 0 0' }}>
           trong 5 phút.
         </p>
 
@@ -240,8 +240,8 @@ function LandingScreen({ onStart }: { onStart: () => void }) {
               {b.svg}
             </div>
             <div style={{ paddingTop:'2px' }}>
-              <div style={{ fontFamily:'Montserrat, sans-serif', fontSize:'12px', fontWeight:600, color:'var(--dark)', marginBottom:'3px', letterSpacing:'0.02em' }}>{b.title}</div>
-              <div style={{ fontFamily:'Montserrat, sans-serif', fontSize:'11px', color:'var(--text-muted)', lineHeight:1.6 }}>{b.desc}</div>
+              <div style={{ fontFamily:'Montserrat, sans-serif', fontSize:'var(--fs-sm)', fontWeight:600, color:'var(--dark)', marginBottom:'3px', letterSpacing:'0.02em' }}>{b.title}</div>
+              <div style={{ fontFamily:'Montserrat, sans-serif', fontSize:'var(--fs-sm)', color:'var(--text-muted)', lineHeight:1.6 }}>{b.desc}</div>
             </div>
           </div>
         ))}
@@ -261,8 +261,8 @@ function LandingScreen({ onStart }: { onStart: () => void }) {
         ].map((s, i) => (
           <div key={i} style={{ display:'flex', alignItems:'baseline', gap:'18px', paddingBottom:'16px', marginBottom:'16px', borderBottom: i < 3 ? '1px solid rgba(181,164,126,0.22)' : 'none' }}>
             {/* Large Cormorant number — editorial feel */}
-            <span style={{ fontFamily:'Cormorant Garamond, Georgia, serif', fontSize:'32px', fontWeight:300, color:'var(--crimson)', lineHeight:1, minWidth:'36px', opacity:0.65 }}>0{i+1}</span>
-            <span style={{ fontFamily:'Montserrat, sans-serif', fontSize:'12px', color:'var(--text-mid)', lineHeight:1.65 }}>{s}</span>
+            <span style={{ fontFamily:'Cormorant Garamond, Georgia, serif', fontSize:'var(--fs-h2)', fontWeight:300, color:'var(--crimson)', lineHeight:1, minWidth:'36px', opacity:0.65 }}>0{i+1}</span>
+            <span style={{ fontFamily:'Montserrat, sans-serif', fontSize:'var(--fs-body)', color:'var(--text-mid)', lineHeight:1.65 }}>{s}</span>
           </div>
         ))}
       </div>
@@ -377,7 +377,7 @@ function IntroScreen({ userInfo, onStart }: { userInfo: UserInfo; onStart: () =>
       {/* Hook — triệu chứng quen thuộc */}
       <div style={{ padding:'20px 0 0' }}>
         <p className="eyebrow text-center mb-4">Trước khi bắt đầu</p>
-        <h2 style={{ fontFamily:'Cormorant Garamond, Georgia, serif', fontSize:'30px', fontWeight:400, lineHeight:1.2, textAlign:'center', color:'var(--dark)', margin:'0 0 20px' }}>
+        <h2 style={{ fontFamily:'Cormorant Garamond, Georgia, serif', fontSize:'var(--fs-h2)', fontWeight:400, lineHeight:1.2, textAlign:'center', color:'var(--dark)', margin:'0 0 20px' }}>
           {userInfo.name}, cơ thể bạn<br /><em style={{ color:'var(--crimson)' }}>đang nói điều gì?</em>
         </h2>
       </div>
@@ -390,13 +390,13 @@ function IntroScreen({ userInfo, onStart }: { userInfo: UserInfo; onStart: () =>
           'Da, tóc kém đi dù đang chăm sóc đúng cách',
           'Tiêu hoá lúc tốt lúc không, không rõ nguyên nhân',
         ].map((s, i) => (
-          <p key={i} style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.6, margin: i < 3 ? '0 0 6px' : '0' }}>{s}</p>
+          <p key={i} style={{ fontSize:'var(--fs-body)', color:'var(--text-mid)', lineHeight:1.6, margin: i < 3 ? '0 0 6px' : '0' }}>{s}</p>
         ))}
       </div>
 
       {/* Giải thích khái niệm — ngắn gọn, không jargon */}
       <div style={{ marginBottom:'24px', padding:'16px', background:'var(--cream-mid)', borderLeft:'3px solid rgba(122,28,35,0.25)' }}>
-        <p style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.8, margin:0 }}>
+        <p style={{ fontSize:'var(--fs-body)', color:'var(--text-mid)', lineHeight:1.8, margin:0 }}>
           Đông y gọi những tín hiệu này là <strong style={{ color:'var(--dark)' }}>thể trạng</strong> — trạng thái cơ thể đang vận hành. Không phải bệnh, không phải điểm số. Biết thể trạng của mình là biết <em style={{ color:'var(--crimson)' }}>tại sao</em> cơ thể phản ứng theo cách đó, và <em style={{ color:'var(--crimson)' }}>cần làm gì</em> để thay đổi.
         </p>
       </div>
@@ -407,13 +407,13 @@ function IntroScreen({ userInfo, onStart }: { userInfo: UserInfo; onStart: () =>
         <p className="eyebrow" style={{ margin:0 }}>9 thể trạng trong Đông y</p>
         <div style={{ flex:1, height:'1px', background:'var(--gold)', opacity:0.5 }} />
       </div>
-      <p style={{ fontSize:'11px', color:'var(--text-muted)', textAlign:'center', marginBottom:'14px' }}>Bạn có nhận ra mình trong số này không?</p>
+      <p style={{ fontSize:'var(--fs-sm)', color:'var(--text-muted)', textAlign:'center', marginBottom:'14px' }}>Bạn có nhận ra mình trong số này không?</p>
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'7px', marginBottom:'24px' }}>
         {THE9.map(t => (
           <div key={t.name} className="card p-3" style={t.full ? { gridColumn:'1 / -1' } : {}}>
-            <div style={{ fontSize:'12px', fontWeight:700, color:'var(--dark)', marginBottom:'3px' }}>{t.name}</div>
-            <div style={{ fontSize:'11px', color:'var(--text-muted)', lineHeight:1.5 }}>{t.hint}</div>
+            <div style={{ fontSize:'var(--fs-sm)', fontWeight:700, color:'var(--dark)', marginBottom:'3px' }}>{t.name}</div>
+            <div style={{ fontSize:'var(--fs-xs)', color:'var(--text-muted)', lineHeight:1.5 }}>{t.hint}</div>
           </div>
         ))}
       </div>
@@ -428,7 +428,7 @@ function IntroScreen({ userInfo, onStart }: { userInfo: UserInfo; onStart: () =>
         ].map((s, i) => (
           <div key={i} style={{ display:'flex', gap:'10px', alignItems:'flex-start', marginBottom: i < 2 ? '9px' : 0 }}>
             <span style={{ color:'var(--crimson)', flexShrink:0, fontSize:'10px', marginTop:'3px' }}>◆</span>
-            <span style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.55 }}>{s}</span>
+            <span style={{ fontSize:'var(--fs-body)', color:'var(--text-mid)', lineHeight:1.55 }}>{s}</span>
           </div>
         ))}
       </div>
@@ -516,7 +516,7 @@ function TestScreen({ userInfo, onDone }: { userInfo: UserInfo; onDone: (answers
       {current && (
         <div key={current.id} className="screen-fade-in">
           <div className="card-crimson p-5 mb-5">
-            <p style={{ fontSize:'16px', lineHeight:1.6, color:'var(--dark)', fontWeight:500 }}>{current.text}</p>
+            <p style={{ fontSize:'var(--fs-h3)', lineHeight:1.6, color:'var(--dark)', fontWeight:500 }}>{current.text}</p>
           </div>
 
           <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
@@ -525,7 +525,7 @@ function TestScreen({ userInfo, onDone }: { userInfo: UserInfo; onDone: (answers
               return (
                 <button key={i} onClick={() => choose(i)}
                   style={{
-                    padding:'14px 16px', textAlign:'left', fontSize:'14px', lineHeight:1.5,
+                    padding:'14px 16px', textAlign:'left', fontSize:'var(--fs-body)', lineHeight:1.5,
                     background: selected ? 'var(--crimson-tint)' : 'var(--cream-lighter)',
                     border: `1px solid ${selected ? 'var(--crimson)' : 'var(--gold)'}`,
                     color: selected ? 'var(--crimson)' : 'var(--dark)',
@@ -641,14 +641,14 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
         {/* Hero: thể name + Chinese chars */}
         <div style={{ textAlign:'center', padding:'8px 24px 0', overflow:'hidden' }}>
           <p className="eyebrow" style={{ fontSize:'9px', marginBottom:'10px', opacity:0.7 }}>THỂ TẠNG CỦA BẠN</p>
-          <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'64px', fontWeight:500, color:'var(--crimson)', lineHeight:1 }}>
+          <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'var(--fs-hero)', fontWeight:500, color:'var(--crimson)', lineHeight:1 }}>
             {info.name}
           </h2>
-          <div style={{ fontFamily:'var(--font-cormorant)', fontSize:'20px', color:'var(--text-muted)', fontStyle:'italic', letterSpacing:'0.1em', marginTop:'6px' }}>
+          <div style={{ fontFamily:'var(--font-cormorant)', fontSize:'var(--fs-h3)', color:'var(--text-muted)', fontStyle:'italic', letterSpacing:'0.1em', marginTop:'6px' }}>
             {HANZI[result.dominant]}
           </div>
           <div style={{ height:'1px', background:'var(--gold)', opacity:0.5, margin:'14px 0 12px' }} />
-          <p style={{ fontSize:'12px', color:'var(--text-mid)', fontStyle:'italic', lineHeight:1.6 }}>{info.tagline}</p>
+          <p style={{ fontSize:'var(--fs-sm)', color:'var(--text-mid)', fontStyle:'italic', lineHeight:1.6 }}>{info.tagline}</p>
         </div>
 
         {/* 2 metrics — flat, no card borders, vertical gold divider */}
@@ -666,7 +666,7 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
 
         {/* Quote — no background, just centered italic */}
         <div style={{ padding:'12px 32px 16px' }}>
-          <p style={{ fontSize:'13px', fontStyle:'italic', color:'var(--dark)', lineHeight:1.7, textAlign:'center' }}>
+          <p style={{ fontSize:'var(--fs-body)', fontStyle:'italic', color:'var(--dark)', lineHeight:1.7, textAlign:'center' }}>
             &ldquo;{info.quote}&rdquo;
           </p>
         </div>
@@ -707,7 +707,7 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
       {/* Analysis */}
       <div className="mb-6">
         <p className="eyebrow mb-3">Phân tích chuyên môn</p>
-        <p style={{ fontSize:'14px', lineHeight:1.8, color:'var(--text-mid)' }}>{info.analysis}</p>
+        <p style={{ fontSize:'var(--fs-body)', lineHeight:1.8, color:'var(--text-mid)' }}>{info.analysis}</p>
       </div>
 
       {/* Bar chart all 9 thể */}
