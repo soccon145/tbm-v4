@@ -5,6 +5,7 @@ import {
   QUESTIONS, THE_CONTENT, THE_KEYS, computeScore, computeBodyAge,
   type TheKey, type ScoreResult, type Recipe,
 } from '../lib/data';
+import { THE_EXTRAS, OFFER_TARGETS, REGISTER_URL, type TheProduct } from '../lib/the-extras';
 
 // ─── Types ────────────────────────────────────────────────────
 type Screen = 'landing'|'infoform'|'intro'|'test'|'loading'|'report'|'roadmap'|'offer'|'thankyou';
@@ -422,7 +423,7 @@ function IntroScreen({ userInfo, onStart }: { userInfo: UserInfo; onStart: () =>
       <div className="card-crimson p-4 mb-6">
         <p style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--crimson)', marginBottom:'12px' }}>Sau bài test bạn sẽ biết</p>
         {[
-          'Thể tạng trội của bạn là gì — và tại sao cơ thể phản ứng như vậy',
+          'Thể trạng trội của bạn là gì — và tại sao cơ thể phản ứng như vậy',
           'Ăn gì, tránh gì, sinh hoạt ra sao cho đúng thể',
           'Lộ trình 7 ngày để bắt đầu thay đổi ngay',
         ].map((s, i) => (
@@ -640,7 +641,7 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
 
         {/* Hero: thể name + Chinese chars */}
         <div style={{ textAlign:'center', padding:'8px 24px 0', overflow:'hidden' }}>
-          <p className="eyebrow" style={{ fontSize:'9px', marginBottom:'10px', opacity:0.7 }}>THỂ TẠNG CỦA BẠN</p>
+          <p className="eyebrow" style={{ fontSize:'9px', marginBottom:'10px', opacity:0.7 }}>THỂ TRẠNG CỦA BẠN</p>
           <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'var(--fs-hero)', fontWeight:500, color:'var(--crimson)', lineHeight:1 }}>
             {info.name}
           </h2>
@@ -735,9 +736,9 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
         </div>
       </div>
 
-      {/* Yếu tố đẩy tuổi */}
+      {/* Vì sao bạn ở thể này (cấu trúc kết quả phần 1 theo feedback) */}
       <div className="mb-6">
-        <p className="eyebrow mb-3">3 yếu tố đẩy tuổi cơ thể lên</p>
+        <p className="eyebrow mb-3">Vì sao bạn ở thể này</p>
         {info.yeuTo.map((y, i) => (
           <div key={i} className="card-crimson p-3 mb-2">
             <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'20px', color:'var(--crimson)', marginRight:'8px', fontWeight:600 }}>{i+1}</span>
@@ -769,7 +770,7 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
 
       {secInfo && (
         <div className="card p-4 mb-8">
-          <p className="eyebrow mb-2">Thể tạng phụ: {secInfo.name}</p>
+          <p className="eyebrow mb-2">Thể trạng phụ: {secInfo.name}</p>
           <p style={{ fontSize:'13px', color:'var(--text-muted)', lineHeight:1.6 }}>{secInfo.tagline}</p>
         </div>
       )}
@@ -872,9 +873,34 @@ function RecipesSection({ recipes }: { recipes: Recipe[] }) {
   );
 }
 
+// ─── Sản phẩm EG gợi ý theo mục (format giống PDF mẫu Dương Hư) ─
+function ProductSuggestions({ title, items }: { title: string; items: TheProduct[] }) {
+  if (!items.length) return null;
+  return (
+    <div style={{ marginBottom: '24px' }}>
+      <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px' }}>
+        ◆ {title}
+      </p>
+      {items.map((p, i) => (
+        <div key={i} className="card-crimson" style={{ padding: '12px 14px', marginBottom: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '10px' }}>
+            <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '17px', fontWeight: 600, color: 'var(--dark)', lineHeight: 1.25 }}>{p.name}</span>
+            <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '17px', fontWeight: 600, color: 'var(--crimson)', flexShrink: 0 }}>{p.price}</span>
+          </div>
+          <div style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '2px 0 6px' }}>{p.spec}</div>
+          <div style={{ fontSize: '12px', color: 'var(--text-mid)', lineHeight: 1.55, fontStyle: 'italic' }}>
+            Vì sao phù hợp: {p.why}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ─── Screen 7: Roadmap ────────────────────────────────────────
 function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; userInfo: UserInfo; onConsent: (yes: boolean) => void }) {
   const info = THE_CONTENT[result.dominant];
+  const extras = THE_EXTRAS[result.dominant];
 
   return (
     <div className="screen-fade-in max-w-md mx-auto px-4 pb-12">
@@ -926,20 +952,18 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
         </div>
       </div>
 
+      {/* Sản phẩm EG gợi ý cho mục ĂN */}
+      <ProductSuggestions title="Sản phẩm EG gợi ý cho mục ăn" items={extras.products.an} />
+
       {/* Recipes — only when available */}
       {info.recipes && info.recipes.length > 0 && (
         <RecipesSection recipes={info.recipes} />
       )}
 
-      {/* Uống theo khung giờ */}
+      {/* ② Đồ uống dưỡng sinh — lịch uống riêng theo thể, không đồ ngọt buổi sáng */}
       <div className="mb-6">
-        <p className="eyebrow mb-3">Uống gì mỗi ngày</p>
-        {[
-          { time:'🌅 Sáng 6–8h', drink:'Nước ấm + gừng / táo đỏ: khởi động Tỳ Khí' },
-          { time:'☀️ Trưa 11–13h', drink:'Nước ấm trong/sau bữa, không uống nước lạnh' },
-          { time:'🌤️ Chiều 14–17h', drink:'Trà thảo mộc phù hợp thể (trà sen, cúc, hoa hồng)' },
-          { time:'🌙 Tối 20–22h', drink:'Nước ấm hoặc sữa ấm, hỗ trợ phục hồi qua đêm' },
-        ].map((t, i) => (
+        <p className="eyebrow mb-3">Đồ uống dưỡng sinh cho thể {info.name}</p>
+        {extras.drinks.map((t, i) => (
           <div key={i} className="card-crimson p-3 mb-2" style={{ display:'flex', gap:'10px' }}>
             <div style={{ fontSize:'14px', flexShrink:0 }}>{t.time.split(' ')[0]}</div>
             <div>
@@ -949,6 +973,43 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
           </div>
         ))}
       </div>
+
+      {/* Sản phẩm EG gợi ý cho mục UỐNG */}
+      <ProductSuggestions title="Sản phẩm EG gợi ý cho mục uống" items={extras.products.uong} />
+
+      {/* ③ Tập luyện & thói quen — phần mới theo feedback (trước đây thiếu) */}
+      <div className="mb-6">
+        <p className="eyebrow mb-3">Tập luyện & thói quen cho thể {info.name}</p>
+
+        <div style={{ fontSize:'11px', fontWeight:600, color:'#2d6a4f', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:'8px' }}>Vận động phù hợp</div>
+        {extras.vanDong.phuHop.map((v, i) => (
+          <div key={i} style={{ display:'flex', gap:'8px', marginBottom:'7px' }}>
+            <span style={{ color:'#2d6a4f', fontSize:'12px', flexShrink:0 }}>✓</span>
+            <span style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.55 }}>{v}</span>
+          </div>
+        ))}
+
+        <div style={{ fontSize:'11px', fontWeight:600, color:'var(--crimson)', textTransform:'uppercase', letterSpacing:'0.1em', margin:'14px 0 8px' }}>Nên tránh</div>
+        {extras.vanDong.tranh.map((v, i) => (
+          <div key={i} style={{ display:'flex', gap:'8px', marginBottom:'7px' }}>
+            <span style={{ color:'var(--crimson)', fontSize:'12px', flexShrink:0 }}>✗</span>
+            <span style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.55 }}>{v}</span>
+          </div>
+        ))}
+
+        <div className="card p-4" style={{ marginTop:'14px' }}>
+          <div style={{ fontSize:'11px', fontWeight:600, color:'var(--crimson)', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:'8px' }}>Thói quen hàng ngày</div>
+          {extras.vanDong.thoiQuen.map((v, i) => (
+            <div key={i} className="flex gap-2 mb-2">
+              <span style={{ color:'var(--crimson)', flexShrink:0 }}>◆</span>
+              <span style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.55 }}>{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Sản phẩm EG gợi ý cho mục TẬP LUYỆN */}
+      <ProductSuggestions title="Dụng cụ EG gợi ý" items={extras.products.tap} />
 
       {/* 30 ngày */}
       <div className="card p-4 mb-6">
@@ -973,7 +1034,7 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
       <div className="card-crimson p-5 mb-4">
         <p className="eyebrow text-center mb-3">Một bước thêm</p>
         <p style={{ fontSize:'14px', lineHeight:1.7, color:'var(--dark)', textAlign:'center', marginBottom:'16px' }}>
-          Elisabeth&apos;s Garden có sản phẩm thảo mộc được chọn lọc riêng cho thể <strong>{info.name}</strong>. Bạn có muốn xem không?
+          Elisabeth&apos;s Garden có khoá học và bộ sản phẩm dưỡng sinh phù hợp với thể <strong>{info.name}</strong>. Bạn có muốn xem không?
         </p>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px' }}>
           <button className="btn-primary" onClick={() => onConsent(true)}>Có, cho mình xem</button>
@@ -984,57 +1045,46 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
   );
 }
 
-// ─── Screen 8a: Offer ─────────────────────────────────────────
+// ─── Screen 8a: Offer — 3 đích chuyển đổi, 1 link đăng ký chung ─
 function OfferScreen({ result, userInfo }: { result: ScoreResult; userInfo: UserInfo }) {
   const info = THE_CONTENT[result.dominant];
-  const [remaining] = useState(Math.floor(Math.random() * 8) + 12);
-
-  const VALUES = [
-    { label:'Tài liệu thể trạng cá nhân', price:'1.800.000đ', bonus: false },
-    { label:'Hướng dẫn phục hồi chuyên sâu', price:'1.200.000đ', bonus: false },
-    { label:`Mặt nạ thảo mộc ${info.name}`, price:'150.000đ', bonus: false },
-    { label:'Báo cáo PDF cá nhân hoá', price:'Tặng kèm', bonus: true },
-    { label:`File 30 công thức nấu ăn cho thể ${info.name}`, price:'Tặng kèm', bonus: true },
-  ];
 
   return (
     <div className="screen-fade-in max-w-md mx-auto px-4 pb-12">
       <BrandHeader small />
 
       <div className="pt-4 pb-5 text-center">
-        <p className="eyebrow mb-2">Box thể trạng {info.name}</p>
+        <p className="eyebrow mb-2">Dành cho thể {info.name}</p>
         <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'30px', lineHeight:1.2 }}>
-          Đặt riêng cho <em style={{ color:'var(--crimson)' }}>{userInfo.name}</em>
+          Bước tiếp theo của <em style={{ color:'var(--crimson)' }}>{userInfo.name}</em>
         </h2>
-        <div className="card-crimson inline-block px-3 py-1 mt-3" style={{ fontSize:'12px', color:'var(--crimson)' }}>
-          Còn {remaining}/30 suất pre-order
-        </div>
+        <p style={{ fontSize:'13px', color:'var(--text-muted)', lineHeight:1.6, marginTop:'10px' }}>
+          Ba cách để bắt đầu chăm sóc thể trạng của bạn, chọn một hoặc kết hợp cả ba.
+        </p>
       </div>
 
-      {/* Value stacking */}
-      <div className="card p-4 mb-6">
-        <p className="eyebrow mb-3">Bao gồm trong box</p>
-        {VALUES.map((v,i) => (
-          <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 0', borderBottom: i<VALUES.length-1 ? '1px solid var(--gold)' : 'none' }}>
-            <span style={{ fontSize:'13px', color:'var(--text-mid)' }}>◆ {v.label}</span>
-            <span style={{ fontSize:'13px', color: v.bonus ? '#2d6a4f' : 'var(--text-muted)', fontWeight: v.bonus ? 600 : 400 }}>{v.price}</span>
+      {OFFER_TARGETS.map(t => (
+        <div key={t.id} className="card" style={{ padding:'16px', marginBottom:'12px' }}>
+          <p className="eyebrow" style={{ fontSize:'9px', marginBottom:'4px' }}>{t.eyebrow}</p>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline', gap:'10px' }}>
+            <h3 style={{ fontFamily:'var(--font-cormorant)', fontSize:'20px', fontWeight:600, color:'var(--dark)', lineHeight:1.2 }}>{t.name}</h3>
+            <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'19px', fontWeight:600, color:'var(--crimson)', flexShrink:0 }}>{t.price}</span>
           </div>
-        ))}
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', paddingTop:'10px', marginTop:'6px', borderTop:'1px solid var(--crimson-border)' }}>
-          <span style={{ fontSize:'12px', color:'var(--text-muted)' }}>Tổng giá trị</span>
-          <span style={{ fontSize:'14px', color:'var(--text-muted)', textDecoration:'line-through' }}>3.940.000đ</span>
+          <p style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.6, margin:'6px 0 8px' }}>{t.desc}</p>
+          {t.url && (
+            <a href={t.url} target={t.url.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
+              style={{ fontSize:'12px', color:'var(--crimson)', fontWeight:600, textDecoration:'underline' }}>
+              Xem chi tiết →
+            </a>
+          )}
         </div>
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'8px' }}>
-          <span style={{ fontSize:'13px', fontWeight:600, color:'var(--dark)' }}>Pre-order hôm nay</span>
-          <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'28px', fontWeight:600, color:'var(--crimson)' }}>890.000đ</span>
-        </div>
-      </div>
+      ))}
 
-      <button className="btn-primary mb-3" onClick={() => window.open('https://elisabeths.garden','_blank')}>
-        Lấy box của {userInfo.name} →
-      </button>
+      <a href={REGISTER_URL} style={{ textDecoration:'none' }}>
+        <span className="btn-primary mb-3" style={{ marginTop:'8px' }}>Đăng ký mua / nhận tư vấn →</span>
+      </a>
       <p style={{ textAlign:'center', fontSize:'11px', color:'var(--text-muted)' }}>
-        Liên hệ Zalo để tư vấn thêm về sản phẩm phù hợp.
+        Một form duy nhất cho cả ba lựa chọn. EG sẽ liên hệ tư vấn, chưa cần thanh toán trước.
       </p>
     </div>
   );
