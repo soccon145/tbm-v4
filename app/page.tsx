@@ -1459,9 +1459,9 @@ async function submitLead(payload: Record<string, unknown>) {
 }
 
 // ─── Screen 7b: Thu email (sau báo cáo, trước lộ trình) ───────
-function EmailCaptureScreen({ result, userInfo, onSubmit, onSkip }: {
+function EmailCaptureScreen({ result, userInfo, onSubmit }: {
   result: ScoreResult; userInfo: UserInfo;
-  onSubmit: (email: string) => void; onSkip: () => void;
+  onSubmit: (email: string) => void;
 }) {
   const info = THE_CONTENT[result.dominant];
   const [email, setEmail] = useState('');
@@ -1499,11 +1499,6 @@ function EmailCaptureScreen({ result, userInfo, onSubmit, onSkip }: {
           {sending ? 'Đang gửi…' : 'Xem lộ trình của tôi →'}
         </button>
       </div>
-
-      <button onClick={onSkip}
-        style={{ display:'block', margin:'0 auto', background:'none', border:'none', color:'var(--text-muted)', fontSize:'13px', textDecoration:'underline', cursor:'pointer' }}>
-        Bỏ qua, xem lộ trình ngay
-      </button>
     </div>
   );
 }
@@ -1559,7 +1554,7 @@ export default function App() {
       {screen === 'test'     && userInfo && <TestScreen userInfo={userInfo} onDone={handleTestDone} />}
       {screen === 'loading'  && userInfo && <LoadingScreen name={userInfo.name} />}
       {screen === 'report'   && result && userInfo && <ReportScreen result={result} userInfo={userInfo} onNext={() => setScreen('capture')} />}
-      {screen === 'capture'  && result && userInfo && <EmailCaptureScreen result={result} userInfo={userInfo} onSubmit={handleCapture} onSkip={() => setScreen('roadmap')} />}
+      {screen === 'capture'  && result && userInfo && <EmailCaptureScreen result={result} userInfo={userInfo} onSubmit={handleCapture} />}
       {screen === 'roadmap'  && result && userInfo && <RoadmapScreen result={result} userInfo={userInfo} onConsent={handleConsent} />}
       {screen === 'offer'    && result && userInfo && <OfferScreen result={result} userInfo={userInfo} />}
       {screen === 'thankyou' && result && userInfo && <ThankYouScreen result={result} userInfo={userInfo} capturedEmail={email} onCaptureEmail={saveLead} />}
