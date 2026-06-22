@@ -208,10 +208,10 @@ export default function SetTraLanding() {
         {/* giá kiểu boxset: serif lớn + badge kem */}
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '20px' }}>
           <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: '56px', fontWeight: 600, color: CREAM, lineHeight: 1 }}>
-            <sup style={{ fontSize: '20px', verticalAlign: 'super' }}>₫</sup>240<sub style={{ fontSize: '18px' }}>.000</sub>
+            <sup style={{ fontSize: '20px', verticalAlign: 'super' }}>₫</sup>450<sub style={{ fontSize: '18px' }}>.000</sub>
           </div>
           <div style={{ background: CREAM, color: 'var(--crimson)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', padding: '6px 14px', textTransform: 'uppercase', marginBottom: '8px' }}>
-            30 gói · 15 vị
+            30 gói · 30 vị
           </div>
         </div>
 
@@ -234,10 +234,10 @@ export default function SetTraLanding() {
             Trong hộp có gì
           </p>
           <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '34px', fontWeight: 400, color: 'var(--dark)', lineHeight: 1.2, margin: '12px 0' }}>
-            Một hộp, <em style={{ color: 'var(--crimson)' }}>mười lăm hương vị</em>
+            Một hộp, <em style={{ color: 'var(--crimson)' }}>ba mươi hương vị</em>
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--text-mid)', lineHeight: 1.9, maxWidth: '400px', margin: '0 auto' }}>
-            30 gói trà túi lọc HUA YI BEI tuyển chọn, gồm 15 vị từ thanh nhẹ, ngọt dịu đến đậm vị thảo mộc.
+            30 gói trà túi lọc tuyển chọn, gồm 30 vị từ thanh nhẹ, ngọt dịu đến đậm vị thảo mộc.
             Mỗi ngày một gói, một bất ngờ nhỏ cho cơ thể.
           </p>
         </div>
@@ -250,7 +250,7 @@ export default function SetTraLanding() {
           </div>
         </div>
 
-        {/* 15 vị */}
+        {/* các vị trà */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', justifyContent: 'center' }}>
           {TEA_FLAVORS.map((t, i) => (
             <span key={i} style={{ fontSize: '12px', background: 'var(--cream-lighter)', border: '1px solid var(--gold)', color: 'var(--text-mid)', padding: '6px 12px' }}>
@@ -268,7 +268,7 @@ export default function SetTraLanding() {
           </p>
         </div>
         {[
-          { n: '01', t: 'Không bao giờ chán vị', d: 'Blind box 15 vị xoay vòng trong 30 gói. Hôm nay bạch trà lê tuyết, mai hồng trà nhân sâm, mốt ô long quýt xanh.' },
+          { n: '01', t: 'Không bao giờ chán vị', d: 'Blind box 30 vị xoay vòng trong 30 gói. Hôm nay bạch trà lê tuyết, mai hồng trà nhân sâm, mốt ô long quýt xanh.' },
           { n: '02', t: 'Thay đồ uống nhiều đường', d: 'Một thói quen nhỏ mỗi ngày: bớt một ly trà sữa, thêm một gói trà dưỡng sinh. Cơ thể nhẹ dần sau 30 ngày.' },
           { n: '03', t: 'Túi lọc pha 30 giây', d: 'Không cần ấm chén cầu kỳ. Một gói, một ly nước nóng, để 3 phút là có ly trà ấm giữa ngày làm việc.' },
         ].map(b => (

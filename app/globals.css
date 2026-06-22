@@ -2,26 +2,30 @@
 
 /* ─── EG Brand Tokens — đồng bộ với eg-boxset-catalog ───────── */
 :root {
-  /* Crimson — đúng tông trang boxset */
+  /* ── Bộ màu chính thức EG (Brand Guidelines 2024, 86Creative) ── */
+  /* Crimson #8A1820 / deep #681219 — bộ màu chính + phụ */
   --crimson:        #8A1820;
   --crimson-deep:   #681219;
   --crimson-tint:   rgba(138,24,32,0.05);
   --crimson-border: rgba(138,24,32,0.16);
+  --rose:           #AA464D; /* sub color — crimson nhạt, accent nhẹ */
 
-  /* Cream vàng ấm — đúng tông trang boxset */
+  /* Cream #F7ECD8 (chính) / #FAF5E8 (sub nhạt) */
   --cream:          #F7ECD8;
   --cream-mid:      #F0E4CA;
-  --cream-lighter:  #FBF4E6;
+  --cream-lighter:  #FAF5E8;
+  /* Nền trang — warm off-white dịu, tránh "vàng khè" khi phủ kín màn hình */
+  --page-bg:        #FBF8F2;
 
-  /* Gold — đúng tông trang boxset */
+  /* Gold #DCCFB4 — sub color */
   --gold:           #DCCFB4;
 
-  /* Olive/sage — herbal accent, use sparingly */
+  /* Olive/sage — herbal accent (ngoài guideline), use sparingly */
   --olive:          #6B7355;
 
-  /* Text — charcoal như boxset, giữ đủ đậm cho mobile */
+  /* Text — charcoal #282828 / near-black #141414 / gray #434343 */
   --dark:           #282828;
-  --dark-deeper:    #1A1A1A;
+  --dark-deeper:    #141414;
   --text-mid:       #434343;
   --text-muted:     #6E5F4B;
 }
@@ -53,18 +57,22 @@
 html { font-size: 16px; }
 
 body {
-  background: var(--cream);
+  background: var(--page-bg);
   color: var(--dark);
   font-family: 'Montserrat', 'Be Vietnam Pro', sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
-  /* Subtle paper grain via SVG noise */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  /* Subtle paper grain via SVG noise — nhẹ tay để nền không bị đục */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.2'/%3E%3C/svg%3E");
   background-blend-mode: multiply;
 }
 
 * { box-sizing: border-box; }
+
+/* App shell responsive: dùng Tailwind utility trực tiếp trên wrapper
+   trong page.tsx (max-w-[480px] + md:shadow/border). Desktop đóng
+   khung cột app căn giữa, mobile full-width. */
 
 /* ─── Typography ────────────────────────────────────────────── */
 .font-display { font-family: 'Cormorant Garamond', Georgia, serif; }

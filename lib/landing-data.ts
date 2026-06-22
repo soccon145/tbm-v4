@@ -21,7 +21,7 @@ export interface LandingProduct {
 }
 
 // ─── 1. SET MIX 30 VỊ TRÀ (nhân vật chính của landing) ────────
-// HUA YI BEI — Hộp trà dưỡng sinh tổng hợp Khinh Dưỡng, 30 gói túi lọc / 15 vị, hộp 92g
+// Blind Box trà dưỡng sinh (sản phẩm của Elizabeth's Garden) — 30 gói túi lọc / 30 vị, hộp 92g
 export const TEA_FLAVORS: string[] = [
   'Bạch trà sơn tra',
   'Bạch trà cam thảo',
@@ -47,10 +47,10 @@ export const PRODUCTS: LandingProduct[] = [
     eyebrow: 'Blind Box · 30 ngày 30 vị trà',
     name: 'Set Mix 30 Vị Trà Dưỡng Sinh',
     tagline: 'Mỗi ngày một vị trà, 30 ngày đổi vị không trùng. Thay cho đồ uống nhiều đường, nhẹ nhàng nuôi dưỡng cơ thể.',
-    price: '240.000đ',
-    priceNote: 'Hộp 92g · 30 gói túi lọc · 15 vị khác nhau',
+    price: '450.000đ',
+    priceNote: 'Hộp 92g · 30 gói túi lọc · 30 vị khác nhau',
     bullets: [
-      '30 gói trà túi lọc, 15 vị từ thanh nhẹ, ngọt dịu đến đậm vị thảo mộc',
+      '30 gói trà túi lọc, 30 vị từ thanh nhẹ, ngọt dịu đến đậm vị thảo mộc',
       'Phù hợp người thích đổi khẩu vị mỗi ngày',
       'Uống hằng ngày thay nước ngọt, trà sữa',
     ],
@@ -58,7 +58,7 @@ export const PRODUCTS: LandingProduct[] = [
       { src: '/images/blindbox/hero.png', alt: 'Set mix 30 vị trà dưỡng sinh' },
       { src: '/images/blindbox/box-01.png', alt: 'Hộp trà 30 gói túi lọc' },
       { src: '/images/blindbox/tea-cup.png', alt: 'Ly trà dưỡng sinh' },
-      { src: '/images/blindbox/flavors.png', alt: '15 vị trà trong hộp' },
+      { src: '/images/blindbox/flavors.png', alt: '30 vị trà trong hộp' },
     ],
   },
   {
@@ -91,13 +91,13 @@ export const PRODUCTS: LandingProduct[] = [
     ],
     // Chưa có ảnh banner khoá học — chờ khách gửi, tạm hiện placeholder
     images: [],
-    externalUrl: 'https://minh-trang.vercel.app/duong-sinh',
+    externalUrl: 'https://15-phut-duong-sinh-eg.soloexpert.cv/',
   },
 ];
 
 // ─── Form đăng ký ─────────────────────────────────────────────
 export const PRODUCT_OPTIONS = [
-  { value: 'tra30', label: 'Set mix 30 vị trà (240.000đ)' },
+  { value: 'tra30', label: 'Set mix 30 vị trà (450.000đ)' },
   { value: 'tcm', label: 'Bộ Dưỡng Sinh Nhập Môn (949.000đ)' },
   { value: 'course', label: 'Khoá học 15 phút dưỡng sinh (từ 299.000đ)' },
 ];

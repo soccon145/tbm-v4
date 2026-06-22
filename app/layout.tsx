@@ -18,7 +18,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Bài Test Thể Trạng — Elisabeth's Garden",
+  title: "Bài Test Thể Trạng — Elizabeth's Garden",
   description: "Khám phá thể trạng của bạn theo Đông y. Bài test 5 phút, câu trả lời cá nhân hoá.",
 };
 

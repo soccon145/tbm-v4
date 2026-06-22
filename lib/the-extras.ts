@@ -391,7 +391,7 @@ export const THE_EXTRAS: Record<TheKey, TheExtras> = {
         { name: 'Bột 7 loại hạt đỏ — Laojinmofang', spec: 'Hộp bột ăn sáng', price: '250.000đ', why: 'Bữa sáng đủ chất, đa dạng nguyên liệu, đúng nguyên tắc cân bằng của Bình Hòa.' },
       ],
       uong: [
-        { name: 'Blind Box 30 ngày 30 vị trà — HUA YI BEI', spec: 'Hộp 92g - 30 gói', price: '240.000đ', why: '15 vị thay đổi mỗi ngày: đa dạng, không cực đoan. Hợp nhất với thể Bình Hòa.' },
+        { name: 'Blind Box 30 ngày 30 vị trà', spec: 'Hộp 92g - 30 gói', price: '450.000đ', why: '30 vị thay đổi mỗi ngày: đa dạng, không cực đoan. Hợp nhất với thể Bình Hòa.' },
       ],
       tap: [
         { name: 'Dép massage ấn huyệt', spec: 'Dép đi trong nhà', price: '250.000đ', why: 'Duy trì kích thích huyệt đạo nhẹ nhàng mỗi ngày trong nhà.' },
@@ -419,7 +419,7 @@ export const OFFER_TARGETS: OfferTarget[] = [
     name: '15 Phút Dưỡng Sinh Đúng Trình Tự',
     desc: 'Học cách chăm sóc cơ thể theo đúng thể trạng của bạn, mỗi ngày chỉ 15 phút.',
     price: 'Từ 299.000đ',
-    url: 'https://minh-trang.vercel.app/duong-sinh',
+    url: 'https://15-phut-duong-sinh-eg.soloexpert.cv/',
     img: '/images/khoa-hoc.svg',
   },
   {
@@ -436,7 +436,7 @@ export const OFFER_TARGETS: OfferTarget[] = [
     eyebrow: 'Blind Box',
     name: 'Set Mix 30 Ngày 30 Vị Trà',
     desc: 'Mỗi ngày một vị trà dưỡng sinh, 30 ngày đổi vị không trùng.',
-    price: '240.000đ',
+    price: '450.000đ',
     url: '/set-tra',
     img: '/images/blindbox/hero.png',
   },
@@ -444,3 +444,105 @@ export const OFFER_TARGETS: OfferTarget[] = [
 
 // 1 link đăng ký mua chung cho cả 3 (theo yêu cầu của Minh Trang)
 export const REGISTER_URL = '/set-tra#dang-ky';
+
+// ─── Checkout gộp (chốt 14/06/2026) ───────────────────────────
+// Flow: khách tick chọn gói → điền thông tin → màn QR (anh Tiến ráp).
+// Khoá học có 2 gói (Nền Tảng / Thực Hành). Sản phẩm vật lý là add-on.
+// physical = true → đơn cần địa chỉ ship. price tính bằng VND (số nguyên).
+// Sửa giá/nội dung tại đây, UI tự cập nhật.
+export interface OfferItem {
+  id: string;
+  name: string;
+  price: number;        // VND
+  oldPrice?: number;    // giá gạch ngang (nếu có)
+  physical: boolean;    // cần địa chỉ ship?
+  recommended?: boolean;
+  tagline: string;
+  bullets: string[];    // "bên trong gói có gì" — hiện ở lớp chi tiết trong app
+  img?: string;         // ảnh đại diện (fallback nếu không có images[])
+  images?: string[];    // gallery nhiều ảnh — vuốt ngang trong lớp chi tiết
+  detailUrl?: string;   // trang tham khảo thêm (không phải nơi thanh toán)
+}
+
+// 2 gói khoá học — chọn 1 (radio). Thực Hành là gói gợi ý mặc định.
+export const COURSE_PACKAGES: OfferItem[] = [
+  {
+    id: 'thuc-hanh',
+    name: 'Gói Thực Hành',
+    price: 499000,
+    oldPrice: 649000,
+    physical: true, // có kit giao tận nhà → cần địa chỉ
+    recommended: true,
+    tagline: 'Khoá học đầy đủ + kit dưỡng sinh giao tận nhà',
+    bullets: [
+      '7 bài học video (15–20 phút/bài) + tài liệu thực hành theo ngày',
+      'Quy trình 4 bước đầy đủ, truy cập không giới hạn',
+      'Bộ kit giao tận nhà: lược gỗ, con lăn ngón tay, set trà dưỡng sinh 7 ngày, kem dưỡng tay, túi đựng',
+      'Giao toàn quốc, nhận kit trong 5–7 ngày làm việc',
+    ],
+    img: '/images/khoa-hoc.svg',
+    detailUrl: 'https://15-phut-duong-sinh-eg.soloexpert.cv/',
+  },
+  {
+    id: 'nen-tang',
+    name: 'Gói Nền Tảng',
+    price: 299000,
+    oldPrice: 3990000,
+    physical: false, // thuần số
+    tagline: 'Chỉ học lý thuyết, không kit',
+    bullets: [
+      '7 bài học video (15–20 phút/bài)',
+      'Tài liệu thực hành theo từng ngày',
+      'Quy trình 4 bước đầy đủ, truy cập không giới hạn',
+    ],
+    img: '/images/khoa-hoc.svg',
+    detailUrl: 'https://15-phut-duong-sinh-eg.soloexpert.cv/',
+  },
+];
+
+// Sản phẩm vật lý đứng riêng — thêm vào đơn (checkbox, chọn nhiều).
+export const ADDON_PRODUCTS: OfferItem[] = [
+  {
+    id: 'toolkit',
+    name: 'Set TCM (Traditional Chinese Medicine)',
+    price: 949000,
+    physical: true,
+    tagline: 'Trọn bộ 6 dụng cụ dưỡng sinh tại nhà, tặng kèm đệm ngải cứu điện',
+    bullets: [
+      'Búa ngải cứu — gõ nhẹ vai, lưng, chân giúp cơ thư giãn, giảm căng cứng khi ngồi lâu',
+      'Lược gỗ — chải kích thích da đầu, tóc đỡ rối, đầu nhẹ hơn sau ngày dài',
+      'Chải body cầm tay — chải toàn thân hỗ trợ lưu thông, cảm giác "tê tê" dễ chịu',
+      'Bộ gua sha mặt (ngọc nhân tạo) — massage mặt thư giãn, da nhìn tươi hơn',
+      'Vỗ bát huyệt size lớn 48cm — vỗ vai, lưng, đùi, giảm cảm giác nặng người',
+      'Ngâm chân RUYI (30 gói thảo dược) + chậu gấp gọn 2 lớp giữ nhiệt',
+      'Tặng kèm đệm ngải cứu điện 35–85°C — giữ ấm bụng, lưng, vai gáy',
+    ],
+    img: '/images/products/tcm-guasha.jpg',
+    images: [
+      '/images/products/tcm-guasha.jpg',
+      '/images/products/tcm-luoc.jpg',
+      '/images/products/tcm-chaibody.jpg',
+    ],
+    detailUrl: 'https://eg-boxset-catalog.vercel.app/',
+  },
+  {
+    id: 'tra30',
+    name: 'Set trà 30 vị',
+    price: 450000,
+    physical: true,
+    tagline: '30 ngày, mỗi ngày một vị trà dưỡng sinh',
+    bullets: [
+      '30 gói trà, mỗi ngày một vị không trùng',
+      'Thảo mộc dưỡng sinh theo Đông y',
+      'Hộp blind box, đổi vị mỗi ngày',
+    ],
+    img: '/images/products/tea-flavors.jpg',
+    images: [
+      '/images/products/tea-flavors.jpg',
+      '/images/products/tea-cup.jpg',
+    ],
+    detailUrl: '/set-tra',
+  },
+];
+
+export const formatVND = (n: number) => n.toLocaleString('vi-VN') + 'đ';

@@ -1,62 +1,37 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, type CSSProperties } from 'react';
 import {
   QUESTIONS, THE_CONTENT, THE_KEYS, computeScore, computeBodyAge,
   type TheKey, type ScoreResult, type Recipe,
 } from '../lib/data';
-import { THE_EXTRAS, OFFER_TARGETS, REGISTER_URL, type TheProduct } from '../lib/the-extras';
+import { THE_EXTRAS, COURSE_PACKAGES, ADDON_PRODUCTS, formatVND, type TheProduct, type OfferItem } from '../lib/the-extras';
 import { THE_THEORY } from '../lib/the-theory';
+import { REGISTER_ENDPOINT } from '../lib/landing-data';
 
 // ─── Types ────────────────────────────────────────────────────
-type Screen = 'landing'|'infoform'|'intro'|'test'|'loading'|'report'|'roadmap'|'offer'|'thankyou';
+type Screen = 'landing'|'infoform'|'intro'|'test'|'loading'|'report'|'capture'|'roadmap'|'offer'|'thankyou';
 
 interface UserInfo { name: string; birthYear: number; gender: string; }
 
-// ─── Brand Logo Mark (SVG monogram) ──────────────────────────
-function EGMonogram({ size = 40 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Outer large C arc — open right */}
-      <path d="M 44 8 A 26 26 0 1 0 44 52" stroke="var(--crimson)" strokeWidth="3" strokeLinecap="round" fill="none"/>
-      {/* Inner smaller C arc — offset */}
-      <path d="M 40 14 A 18 18 0 1 0 40 46" stroke="var(--crimson)" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.55"/>
-      {/* Diagonal slash — the E/G crossbar feel */}
-      <line x1="22" y1="18" x2="42" y2="42" stroke="var(--crimson)" strokeWidth="2" strokeLinecap="round" opacity="0.7"/>
-    </svg>
-  );
-}
-
-// ─── Brand Header ─────────────────────────────────────────────
+// ─── Brand Header — logo chính thức EG (bộ nhận diện 2024) ────
+// Asset trong /public/brand/, tô crimson #8A1820 từ logo gốc 86Creative.
+// Header lớn: full lockup (mark + chữ). Header nhỏ: chỉ vòng tròn E+G.
 function BrandHeader({ small }: { small?: boolean }) {
+  if (small) {
+    return (
+      <div className="text-center py-3">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/eg-mark-crimson.png" alt="Elizabeth's Garden"
+          style={{ height:'34px', width:'auto', display:'inline-block' }} />
+      </div>
+    );
+  }
   return (
-    <div className={`text-center ${small ? 'py-3' : 'py-4'}`}>
-      {!small && (
-        <div style={{ display:'flex', justifyContent:'center', marginBottom:'8px' }}>
-          <EGMonogram size={44} />
-        </div>
-      )}
-      <div style={{
-        fontFamily:'Cormorant Garamond, Georgia, serif',
-        fontSize: small ? '13px' : '17px',
-        fontWeight: 500,
-        letterSpacing: '0.28em',
-        textTransform: 'uppercase',
-        color: 'var(--dark)',
-        lineHeight: 1.2,
-      }}>
-        Elizabeth&apos;s
-      </div>
-      <div style={{
-        fontFamily:'Montserrat, sans-serif',
-        fontSize: small ? '8px' : '9px',
-        letterSpacing: '0.5em',
-        textTransform: 'uppercase',
-        color: 'var(--text-mid)',
-        marginTop: '2px',
-      }}>
-        ◆ Garden ◆
-      </div>
+    <div className="text-center py-4">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/eg-logo-crimson.png" alt="Elizabeth's Garden"
+        style={{ height:'94px', width:'auto', display:'inline-block' }} />
     </div>
   );
 }
@@ -296,6 +271,14 @@ function LandingScreen({ onStart }: { onStart: () => void }) {
         </button>
         <p style={{ textAlign:'center', fontFamily:'Montserrat, sans-serif', fontSize:'10px', color:'var(--text-muted)', letterSpacing:'0.08em', marginTop:'12px' }}>
           🔒 AN TOÀN &amp; BẢO MẬT THÔNG TIN CỦA BẠN
+        </p>
+      </div>
+
+      {/* ── Disclaimer y khoa (yêu cầu khách Minh Trang 16/06) — footer, in hoa chữ đỏ ── */}
+      <div style={{ padding:'28px 24px 0' }}>
+        <div style={{ height:'1px', background:'var(--gold)', opacity:0.5, marginBottom:'16px' }} />
+        <p style={{ fontFamily:'Montserrat, sans-serif', fontSize:'10px', fontWeight:600, color:'var(--crimson)', lineHeight:1.7, textTransform:'uppercase', letterSpacing:'0.03em', margin:0, textAlign:'center' }}>
+          Bài test chỉ mang tính tham khảo và gợi ý sản phẩm dưỡng sinh, không phải chẩn đoán y khoa. Nếu có vấn đề sức khoẻ, bạn vui lòng đi khám tại cơ sở y tế uy tín.
         </p>
       </div>
     </div>
@@ -637,7 +620,7 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
           <div style={{ width:'40px', height:'1px', background:'var(--crimson)', margin:'0 auto 8px' }} />
           <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'6px' }}>
             <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'13px', color:'var(--text-muted)' }}>◆</span>
-            <span style={{ fontSize:'9px', color:'var(--text-muted)', letterSpacing:'0.25em', fontFamily:'var(--font-cormorant)' }}>Elisabeth&apos;s Garden</span>
+            <span style={{ fontSize:'9px', color:'var(--text-muted)', letterSpacing:'0.25em', fontFamily:'var(--font-cormorant)' }}>Elizabeth&apos;s Garden</span>
           </div>
         </div>
 
@@ -692,7 +675,7 @@ function ReportScreen({ result, userInfo, onNext }: { result: ScoreResult; userI
         {/* Founder signature — just name, no paragraph text, no eyebrow */}
         <div style={{ textAlign:'center', padding:'8px 24px 16px' }}>
           <div style={{ fontFamily:'var(--font-cormorant)', fontSize:'20px', color:'var(--crimson)', fontStyle:'italic' }}>
-            Elisabeth ♡
+            Elizabeth ♡
           </div>
         </div>
 
@@ -1087,7 +1070,7 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
       <div className="card-crimson p-5 mb-4">
         <p className="eyebrow text-center mb-3">Một bước thêm</p>
         <p style={{ fontSize:'14px', lineHeight:1.7, color:'var(--dark)', textAlign:'center', marginBottom:'16px' }}>
-          Elisabeth&apos;s Garden có khoá học và bộ sản phẩm dưỡng sinh phù hợp với thể <strong>{info.name}</strong>. Bạn có muốn xem không?
+          Elizabeth&apos;s Garden có khoá học và bộ sản phẩm dưỡng sinh phù hợp với thể <strong>{info.name}</strong>. Bạn có muốn xem không?
         </p>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px' }}>
           <button className="btn-primary" onClick={() => onConsent(true)}>Có, cho mình xem</button>
@@ -1098,59 +1081,322 @@ function RoadmapScreen({ result, userInfo, onConsent }: { result: ScoreResult; u
   );
 }
 
-// ─── Screen 8a: Offer — 3 đích chuyển đổi, 1 link đăng ký chung ─
+// ─── Screen 8a: Offer — checkout gộp 3 bước (chốt 14/06/2026) ──
+// Bước: select (chọn gói) → info (điền thông tin) → qr (màn thanh toán).
+// Bố cục xếp tầng: 1 gói gợi ý nổi bật + downsell + add-on, tránh bày 4 ô
+// ngang khiến khách đắn đo rồi bỏ sang fanpage. QR + ghi đơn Google Sheet
+// do anh Tiến ráp ở bước 'qr' (xem khối TODO bên dưới).
 function OfferScreen({ result, userInfo }: { result: ScoreResult; userInfo: UserInfo }) {
   const info = THE_CONTENT[result.dominant];
+  const [step, setStep] = useState<'select'|'info'|'qr'>('select');
+  const [coursePkg, setCoursePkg] = useState<string | null>('thuc-hanh'); // gói gợi ý chọn sẵn
+  const [addons, setAddons] = useState<Set<string>>(new Set());
+  const [name, setName] = useState(userInfo.name);
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [email, setEmail] = useState('');
+  const [orderCode, setOrderCode] = useState('');
+  const [detailItem, setDetailItem] = useState<OfferItem | null>(null); // lớp "xem chi tiết" trong app
 
+  const inputStyle: CSSProperties = { width:'100%', padding:'12px', background:'var(--cream-lighter)', border:'1px solid var(--gold)', fontSize:'14px', outline:'none', color:'var(--dark)' };
+  const labelStyle: CSSProperties = { fontSize:'11px', fontWeight:600, letterSpacing:'0.1em', textTransform:'uppercase', color:'var(--crimson)', display:'block', marginBottom:'6px' };
+
+  const selectedCourse = COURSE_PACKAGES.find(p => p.id === coursePkg) || null;
+  const selectedAddons = ADDON_PRODUCTS.filter(a => addons.has(a.id));
+  const items: OfferItem[] = [...(selectedCourse ? [selectedCourse] : []), ...selectedAddons];
+  const total = items.reduce((s, i) => s + i.price, 0);
+  const needAddress = items.some(i => i.physical);
+  const hasItems = items.length > 0;
+
+  const toggleAddon = (id: string) => setAddons(prev => {
+    const next = new Set(prev);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    return next;
+  });
+
+  const goToQr = () => {
+    // Mã đơn tạm phía client để hiển thị. Anh Tiến thay bằng mã thật từ hệ thống.
+    setOrderCode('EG' + String(Date.now()).slice(-6));
+    setStep('qr');
+  };
+
+  const infoValid = name.trim() && phone.trim().length >= 8 && (!needAddress || address.trim().length >= 6);
+
+  // Tóm tắt đơn + tổng (dùng lại ở bước info và qr)
+  const OrderSummary = () => (
+    <div className="card p-4 mb-4">
+      {items.map(i => (
+        <div key={i.id} style={{ display:'flex', justifyContent:'space-between', fontSize:'13px', color:'var(--text-mid)', marginBottom:'6px' }}>
+          <span>{i.name}</span><span>{formatVND(i.price)}</span>
+        </div>
+      ))}
+      <div style={{ display:'flex', justifyContent:'space-between', borderTop:'1px solid var(--crimson-border)', paddingTop:'8px', marginTop:'4px', fontWeight:600, color:'var(--dark)' }}>
+        <span>Tổng</span><span style={{ color:'var(--crimson)' }}>{formatVND(total)}</span>
+      </div>
+    </div>
+  );
+
+  // ── Bước 1: chọn gói ──────────────────────────────────────
+  if (step === 'select') {
+    return (
+      <div className="screen-fade-in max-w-md mx-auto px-4 pb-12">
+        <BrandHeader small />
+        <div className="pt-4 pb-5 text-center">
+          <p className="eyebrow mb-2">Dành cho thể {info.name}</p>
+          <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'28px', lineHeight:1.2 }}>
+            EG gợi ý cho <em style={{ color:'var(--crimson)', fontStyle:'italic' }}>{userInfo.name}</em>
+          </h2>
+        </div>
+
+        {/* Gói gợi ý — nổi bật, chọn sẵn */}
+        {COURSE_PACKAGES.filter(p => p.recommended).map(p => {
+          const sel = coursePkg === p.id;
+          return (
+            <div key={p.id} onClick={() => setCoursePkg(sel ? null : p.id)}
+              style={{ position:'relative', cursor:'pointer', border:`2px solid ${sel ? 'var(--crimson)' : 'var(--crimson-border)'}`, background: sel ? 'var(--crimson-tint)' : 'var(--cream-lighter)', padding:'18px 16px 16px', marginBottom:'4px' }}>
+              <div style={{ position:'absolute', top:'-11px', left:'16px', background:'var(--crimson)', color:'#fff', fontSize:'10px', fontWeight:600, letterSpacing:'0.05em', textTransform:'uppercase', padding:'3px 10px' }}>Phù hợp nhất với bạn</div>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline', marginTop:'4px' }}>
+                <h3 style={{ fontFamily:'var(--font-cormorant)', fontSize:'21px', fontWeight:600, color:'var(--dark)' }}>{p.name}</h3>
+                <div>
+                  {p.oldPrice && <span style={{ fontSize:'13px', color:'var(--text-muted)', textDecoration:'line-through', marginRight:'6px' }}>{formatVND(p.oldPrice)}</span>}
+                  <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'22px', fontWeight:600, color:'var(--crimson)' }}>{formatVND(p.price)}</span>
+                </div>
+              </div>
+              <div style={{ margin:'10px 0 4px' }}>
+                {p.bullets.map((b, i) => (
+                  <div key={i} style={{ display:'flex', gap:'8px', marginBottom:'5px' }}>
+                    <span style={{ color:'var(--crimson)', flexShrink:0 }}>◆</span>
+                    <span style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.5 }}>{b}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'8px' }}>
+                <span style={{ fontSize:'12px', fontWeight:600, color:'var(--crimson)' }}>{sel ? '✓ Đã chọn' : 'Chọn gói này'}</span>
+                <button onClick={(e) => { e.stopPropagation(); setDetailItem(p); }}
+                  style={{ background:'none', border:'none', cursor:'pointer', fontSize:'12px', color:'var(--text-muted)', textDecoration:'underline', padding:0 }}>
+                  Xem chi tiết →
+                </button>
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Downsell — gói rẻ hơn, thu nhỏ */}
+        <div style={{ textAlign:'center', fontSize:'12px', color:'var(--text-muted)', margin:'12px 0' }}>hoặc</div>
+        {COURSE_PACKAGES.filter(p => !p.recommended).map(p => {
+          const sel = coursePkg === p.id;
+          return (
+            <div key={p.id} onClick={() => setCoursePkg(sel ? null : p.id)}
+              style={{ cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center', border:`1px solid ${sel ? 'var(--crimson)' : 'var(--gold)'}`, background: sel ? 'var(--crimson-tint)' : 'transparent', padding:'12px 14px', marginBottom:'10px' }}>
+              <div>
+                <div style={{ fontSize:'14px', color:'var(--dark)', fontWeight: sel ? 600 : 400 }}>{p.name}</div>
+                <div style={{ fontSize:'12px', color:'var(--text-muted)' }}>{p.tagline}</div>
+                <button onClick={(e) => { e.stopPropagation(); setDetailItem(p); }}
+                  style={{ background:'none', border:'none', cursor:'pointer', fontSize:'11px', color:'var(--crimson)', textDecoration:'underline', padding:'4px 0 0' }}>
+                  Xem chi tiết →
+                </button>
+              </div>
+              <div style={{ fontSize:'14px', fontWeight:600, color: sel ? 'var(--crimson)' : 'var(--text-mid)', flexShrink:0, marginLeft:'8px' }}>{formatVND(p.price)}</div>
+            </div>
+          );
+        })}
+
+        {/* Add-on vật lý — thêm vào đơn */}
+        <div style={{ border:'1px solid var(--gold)', padding:'12px 14px', marginBottom:'16px' }}>
+          <div style={{ fontSize:'12px', color:'var(--text-muted)', marginBottom:'4px', fontWeight:600 }}>+ Thêm sản phẩm lẻ vào đơn</div>
+          {ADDON_PRODUCTS.map(a => {
+            const on = addons.has(a.id);
+            return (
+              <div key={a.id} onClick={() => toggleAddon(a.id)}
+                style={{ cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderTop:'1px solid var(--crimson-border)' }}>
+                <div style={{ display:'flex', gap:'10px', alignItems:'center' }}>
+                  <span style={{ width:'18px', height:'18px', border:`1.5px solid ${on ? 'var(--crimson)' : 'var(--gold)'}`, background: on ? 'var(--crimson)' : 'transparent', color:'#fff', fontSize:'11px', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>{on ? '✓' : ''}</span>
+                  <div>
+                    <div style={{ fontSize:'13px', color:'var(--dark)' }}>{a.name}</div>
+                    <div style={{ fontSize:'11px', color:'var(--text-muted)' }}>{a.tagline}</div>
+                    <button onClick={(e) => { e.stopPropagation(); setDetailItem(a); }}
+                      style={{ background:'none', border:'none', cursor:'pointer', fontSize:'11px', color:'var(--crimson)', textDecoration:'underline', padding:'4px 0 0' }}>
+                      Xem chi tiết →
+                    </button>
+                  </div>
+                </div>
+                <div style={{ fontSize:'13px', color:'var(--text-mid)', fontWeight:600, flexShrink:0, marginLeft:'8px' }}>{formatVND(a.price)}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Tổng + CTA */}
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline', marginBottom:'10px' }}>
+          <span style={{ fontSize:'13px', color:'var(--text-muted)' }}>Tổng cộng</span>
+          <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'24px', fontWeight:600, color:'var(--crimson)' }}>{formatVND(total)}</span>
+        </div>
+        <button className="btn-primary" disabled={!hasItems} style={{ opacity: hasItems ? 1 : 0.5 }} onClick={() => hasItems && setStep('info')}>
+          Lấy mã thanh toán →
+        </button>
+        <p style={{ textAlign:'center', fontSize:'11px', color:'var(--text-muted)', marginTop:'10px' }}>
+          Thanh toán ngay trong trang, không cần nhắn tin chờ.
+        </p>
+
+        {/* Lớp "xem chi tiết" — mở ngay trong app, không thoát ra ngoài.
+            Chọn xong đóng lại, quay về màn này để tiếp tục thanh toán. */}
+        {detailItem && (() => {
+          const isCourse = COURSE_PACKAGES.some(p => p.id === detailItem.id);
+          const inOrder = isCourse ? coursePkg === detailItem.id : addons.has(detailItem.id);
+          const onCTA = () => {
+            if (isCourse) setCoursePkg(detailItem.id);
+            else if (!addons.has(detailItem.id)) toggleAddon(detailItem.id);
+            setDetailItem(null);
+          };
+          const imgs = detailItem.images ?? (detailItem.img ? [detailItem.img] : []);
+          return (
+            <div onClick={() => setDetailItem(null)}
+              style={{ position:'fixed', inset:0, background:'rgba(40,20,22,0.55)', zIndex:50, display:'flex', alignItems:'flex-end', justifyContent:'center' }}>
+              <div onClick={(e) => e.stopPropagation()} className="screen-fade-in"
+                style={{ background:'var(--cream)', width:'100%', maxWidth:'448px', maxHeight:'90vh', overflowY:'auto' }}>
+                {imgs.length > 0 && (
+                  <div>
+                    <div style={{ display:'flex', overflowX:'auto', scrollSnapType:'x mandatory', background:'var(--cream-mid)', WebkitOverflowScrolling:'touch' }}>
+                      {imgs.map((src, i) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img key={i} src={src} alt={`${detailItem.name} ${i + 1}`}
+                          style={{ flex: imgs.length > 1 ? '0 0 88%' : '0 0 100%', aspectRatio:'4 / 3', objectFit:'contain', display:'block', background:'var(--cream-mid)', scrollSnapAlign:'center' }} />
+                      ))}
+                    </div>
+                    {imgs.length > 1 && (
+                      <p style={{ textAlign:'center', fontSize:'11px', color:'var(--text-muted)', padding:'6px 0', background:'var(--cream-mid)', margin:0 }}>
+                        ← vuốt xem {imgs.length} ảnh →
+                      </p>
+                    )}
+                  </div>
+                )}
+                <div style={{ padding:'18px' }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:'10px' }}>
+                    <div>
+                      <h3 style={{ fontFamily:'var(--font-cormorant)', fontSize:'22px', fontWeight:600, color:'var(--dark)', lineHeight:1.2 }}>{detailItem.name}</h3>
+                      <p style={{ fontSize:'13px', color:'var(--text-muted)', marginTop:'4px' }}>{detailItem.tagline}</p>
+                    </div>
+                    <button onClick={() => setDetailItem(null)} aria-label="Đóng"
+                      style={{ background:'none', border:'none', cursor:'pointer', fontSize:'24px', color:'var(--text-muted)', lineHeight:1, padding:0, flexShrink:0 }}>×</button>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'baseline', gap:'8px', margin:'12px 0 14px' }}>
+                    {detailItem.oldPrice && <span style={{ fontSize:'14px', color:'var(--text-muted)', textDecoration:'line-through' }}>{formatVND(detailItem.oldPrice)}</span>}
+                    <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'25px', fontWeight:600, color:'var(--crimson)' }}>{formatVND(detailItem.price)}</span>
+                  </div>
+                  <p className="eyebrow mb-2">Bên trong gồm</p>
+                  <div style={{ marginBottom:'18px' }}>
+                    {detailItem.bullets.map((b, i) => (
+                      <div key={i} style={{ display:'flex', gap:'8px', marginBottom:'7px' }}>
+                        <span style={{ color:'var(--crimson)', flexShrink:0 }}>◆</span>
+                        <span style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.55 }}>{b}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="btn-primary" onClick={onCTA}>
+                    {isCourse
+                      ? (inOrder ? '✓ Đã chọn — quay lại thanh toán' : 'Chọn gói này')
+                      : (inOrder ? '✓ Đã thêm — quay lại thanh toán' : 'Thêm vào đơn')}
+                  </button>
+                  <button className="btn-outline" style={{ marginTop:'10px' }} onClick={() => setDetailItem(null)}>
+                    Đóng, xem lựa chọn khác
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+      </div>
+    );
+  }
+
+  // ── Bước 2: điền thông tin ────────────────────────────────
+  if (step === 'info') {
+    return (
+      <div className="screen-fade-in max-w-md mx-auto px-4 pb-12">
+        <BrandHeader small />
+        <div className="pt-4 pb-4">
+          <p className="eyebrow text-center mb-2">Thông tin nhận hàng</p>
+          <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'26px', textAlign:'center' }}>Gần xong rồi, {userInfo.name}</h2>
+        </div>
+
+        <OrderSummary />
+
+        <div style={{ display:'flex', flexDirection:'column', gap:'14px', marginBottom:'20px' }}>
+          <div>
+            <label style={labelStyle}>Tên</label>
+            <input style={inputStyle} value={name} onChange={e => setName(e.target.value)} />
+          </div>
+          <div>
+            <label style={labelStyle}>Số điện thoại</label>
+            <input style={inputStyle} value={phone} onChange={e => setPhone(e.target.value)} type="tel" placeholder="Ví dụ: 0901 234 567" />
+          </div>
+          {needAddress && (
+            <div>
+              <label style={labelStyle}>Địa chỉ nhận hàng</label>
+              <input style={inputStyle} value={address} onChange={e => setAddress(e.target.value)} placeholder="Số nhà, đường, phường/xã, tỉnh/thành" />
+            </div>
+          )}
+          <div>
+            <label style={labelStyle}>Email (không bắt buộc)</label>
+            <input style={inputStyle} value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="Để gửi xác nhận đơn" />
+          </div>
+        </div>
+
+        <button className="btn-primary" disabled={!infoValid} style={{ opacity: infoValid ? 1 : 0.5 }} onClick={() => infoValid && goToQr()}>
+          Tạo mã thanh toán →
+        </button>
+        <button className="btn-outline" style={{ marginTop:'10px' }} onClick={() => setStep('select')}>← Quay lại chọn gói</button>
+      </div>
+    );
+  }
+
+  // ── Bước 3: màn thanh toán (chỗ ráp QR cho anh Tiến) ──────
   return (
     <div className="screen-fade-in max-w-md mx-auto px-4 pb-12">
       <BrandHeader small />
+      <div className="pt-4 pb-3 text-center">
+        <p className="eyebrow mb-2">Bước cuối — thanh toán</p>
+        <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'26px' }}>Quét mã để hoàn tất</h2>
+      </div>
 
-      <div className="pt-4 pb-5 text-center">
-        <p className="eyebrow mb-2">Dành cho thể {info.name}</p>
-        <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'30px', lineHeight:1.2 }}>
-          Bước tiếp theo của <em style={{ color:'var(--crimson)' }}>{userInfo.name}</em>
-        </h2>
-        <p style={{ fontSize:'13px', color:'var(--text-muted)', lineHeight:1.6, marginTop:'10px' }}>
-          Ba cách để bắt đầu chăm sóc thể trạng của bạn, chọn một hoặc kết hợp cả ba.
+      <OrderSummary />
+      <div style={{ display:'flex', justifyContent:'space-between', fontSize:'12px', color:'var(--text-muted)', margin:'-8px 4px 16px' }}>
+        <span>Mã đơn</span><span>{orderCode}</span>
+      </div>
+
+      {/* ===================================================================
+          CHỖ RÁP QR — ANH TIẾN LÀM PHẦN NÀY
+          1. Sinh QR động: số tiền = total ({total}), nội dung CK = orderCode.
+             Gợi ý VietQR:
+             https://img.vietqr.io/image/<BANK>-<ACCOUNT>-compact2.png?amount=<total>&addInfo=<orderCode>
+          2. Khi xác nhận đã nhận tiền (webhook SePay/Casso): POST đơn vào
+             Google Sheet gồm: orderCode, items, total, name, phone, address,
+             email, thể = result.dominant ({result.dominant}).
+          3. Sau khi ghi đơn: phần khoá học → cấp qua email; phần vật lý →
+             đẩy team chị Trang ship. (Chưa CK thì KHÔNG phát sinh đơn.)
+          Hiện để placeholder bên dưới.
+          =================================================================== */}
+      <div style={{ border:'1px dashed var(--crimson-border)', background:'var(--cream-lighter)', padding:'24px 16px', textAlign:'center', marginBottom:'16px' }}>
+        <div style={{ width:'180px', height:'180px', margin:'0 auto 12px', background:'var(--cream-mid)', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--text-muted)', fontSize:'13px' }}>Mã QR hiển thị ở đây</div>
+        <p style={{ fontSize:'12px', color:'var(--text-muted)', lineHeight:1.6 }}>
+          Chuyển khoản đúng <strong style={{ color:'var(--crimson)' }}>{formatVND(total)}</strong>, nội dung ghi <strong>{orderCode}</strong>.
         </p>
       </div>
 
-      {OFFER_TARGETS.map(t => (
-        <div key={t.id} className="card" style={{ marginBottom:'12px', overflow:'hidden' }}>
-          {t.img && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={t.img} alt={t.name} style={{ width:'100%', aspectRatio:'16 / 9', objectFit:'cover', display:'block', background:'var(--cream-mid)' }} />
-          )}
-          <div style={{ padding:'16px' }}>
-          <p className="eyebrow" style={{ fontSize:'9px', marginBottom:'4px' }}>{t.eyebrow}</p>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline', gap:'10px' }}>
-            <h3 style={{ fontFamily:'var(--font-cormorant)', fontSize:'20px', fontWeight:600, color:'var(--dark)', lineHeight:1.2 }}>{t.name}</h3>
-            <span style={{ fontFamily:'var(--font-cormorant)', fontSize:'19px', fontWeight:600, color:'var(--crimson)', flexShrink:0 }}>{t.price}</span>
-          </div>
-          <p style={{ fontSize:'13px', color:'var(--text-mid)', lineHeight:1.6, margin:'6px 0 8px' }}>{t.desc}</p>
-          {t.url && (
-            <a href={t.url} target={t.url.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
-              style={{ fontSize:'12px', color:'var(--crimson)', fontWeight:600, textDecoration:'underline' }}>
-              Xem chi tiết →
-            </a>
-          )}
-          </div>
-        </div>
-      ))}
+      <div className="card-crimson p-4 mb-4" style={{ textAlign:'center' }}>
+        <p style={{ fontSize:'13px', color:'var(--dark)', lineHeight:1.6 }}>
+          Sau khi chuyển khoản, đơn của bạn được ghi nhận và EG xử lý trong 24h.<br />
+          <span style={{ color:'var(--text-muted)', fontSize:'12px' }}>Chưa chuyển khoản thì chưa phát sinh đơn.</span>
+        </p>
+      </div>
 
-      <a href={REGISTER_URL} style={{ textDecoration:'none' }}>
-        <span className="btn-primary mb-3" style={{ marginTop:'8px' }}>Đăng ký mua / nhận tư vấn →</span>
-      </a>
-      <p style={{ textAlign:'center', fontSize:'11px', color:'var(--text-muted)' }}>
-        Một form duy nhất cho cả ba lựa chọn. EG sẽ liên hệ tư vấn, chưa cần thanh toán trước.
-      </p>
+      <button className="btn-outline" onClick={() => setStep('info')}>← Sửa thông tin</button>
     </div>
   );
 }
 
 // ─── Screen 8b: ThankYou ──────────────────────────────────────
-function ThankYouScreen({ result, userInfo }: { result: ScoreResult; userInfo: UserInfo }) {
+function ThankYouScreen({ result, userInfo, capturedEmail, onCaptureEmail }: { result: ScoreResult; userInfo: UserInfo; capturedEmail: string; onCaptureEmail: (email: string) => void }) {
   const info = THE_CONTENT[result.dominant];
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
@@ -1166,7 +1412,11 @@ function ThankYouScreen({ result, userInfo }: { result: ScoreResult; userInfo: U
         </p>
       </div>
 
-      {!sent ? (
+      {capturedEmail ? (
+        <div className="card-crimson p-5 mb-6 text-center">
+          <p style={{ fontSize:'14px', color:'var(--dark)' }}>✓ Mình sẽ gửi báo cáo PDF + lộ trình tới <strong>{capturedEmail}</strong> trong vòng 24h.</p>
+        </div>
+      ) : !sent ? (
         <div className="card p-5 mb-6">
           <p className="eyebrow mb-3">Nhận lộ trình qua email</p>
           <p style={{ fontSize:'13px', color:'var(--text-muted)', marginBottom:'12px', lineHeight:1.6 }}>
@@ -1177,7 +1427,7 @@ function ThankYouScreen({ result, userInfo }: { result: ScoreResult; userInfo: U
             style={{ width:'100%', padding:'12px', background:'var(--cream)', border:'1px solid var(--gold)', fontSize:'14px', outline:'none', marginBottom:'10px', color:'var(--dark)' }}
           />
           <button className="btn-primary" disabled={!email.includes('@')} style={{ opacity: email.includes('@') ? 1 : 0.5 }}
-            onClick={() => setSent(true)}>
+            onClick={() => { onCaptureEmail(email.trim()); setSent(true); }}>
             Gửi cho mình →
           </button>
         </div>
@@ -1192,14 +1442,100 @@ function ThankYouScreen({ result, userInfo }: { result: ScoreResult; userInfo: U
   );
 }
 
+// ─── Lead → Google Sheet ──────────────────────────────────────
+// POST về REGISTER_ENDPOINT (Google Apps Script Web App). Khi endpoint
+// còn rỗng (chưa có URL của Minh Trang) thì bỏ qua, KHÔNG chặn UX.
+async function submitLead(payload: Record<string, unknown>) {
+  if (!REGISTER_ENDPOINT) return;
+  try {
+    await fetch(REGISTER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    /* nuốt lỗi mạng — không chặn người dùng xem tiếp */
+  }
+}
+
+// ─── Screen 7b: Thu email (sau báo cáo, trước lộ trình) ───────
+function EmailCaptureScreen({ result, userInfo, onSubmit, onSkip }: {
+  result: ScoreResult; userInfo: UserInfo;
+  onSubmit: (email: string) => void; onSkip: () => void;
+}) {
+  const info = THE_CONTENT[result.dominant];
+  const [email, setEmail] = useState('');
+  const [sending, setSending] = useState(false);
+  const valid = /\S+@\S+\.\S+/.test(email);
+
+  const handle = async () => {
+    if (!valid || sending) return;
+    setSending(true);
+    await onSubmit(email.trim());
+  };
+
+  return (
+    <div className="screen-fade-in max-w-md mx-auto px-4 pb-12">
+      <BrandHeader small />
+      <div className="pt-6 pb-4 text-center">
+        <div style={{ fontFamily:'var(--font-cormorant)', fontSize:'40px', color:'var(--crimson)', marginBottom:'10px' }}>✦</div>
+        <h2 style={{ fontFamily:'var(--font-cormorant)', fontSize:'26px', marginBottom:'8px' }}>
+          Nhận báo cáo thể <em style={{ fontStyle:'italic' }}>{info.name}</em> của bạn
+        </h2>
+        <p style={{ fontSize:'14px', color:'var(--text-muted)', lineHeight:1.6 }}>
+          Để mình gửi <strong>báo cáo PDF chi tiết</strong> + <strong>lộ trình 7 ngày</strong> riêng cho thể trạng của bạn qua email.
+        </p>
+      </div>
+
+      <div className="card p-5 mb-5">
+        <label style={{ fontSize:'11px', fontWeight:600, letterSpacing:'0.1em', textTransform:'uppercase', color:'var(--crimson)', display:'block', marginBottom:'8px' }}>Email của bạn</label>
+        <input value={email} onChange={e=>setEmail(e.target.value)}
+          placeholder="email@gmail.com" type="email"
+          onKeyDown={e => { if (e.key === 'Enter') handle(); }}
+          style={{ width:'100%', padding:'12px', background:'var(--cream-lighter)', border:'1px solid var(--gold)', fontSize:'14px', outline:'none', marginBottom:'12px', color:'var(--dark)' }}
+        />
+        <button className="btn-primary" disabled={!valid || sending} style={{ opacity: valid && !sending ? 1 : 0.5 }}
+          onClick={handle}>
+          {sending ? 'Đang gửi…' : 'Xem lộ trình của tôi →'}
+        </button>
+      </div>
+
+      <button onClick={onSkip}
+        style={{ display:'block', margin:'0 auto', background:'none', border:'none', color:'var(--text-muted)', fontSize:'13px', textDecoration:'underline', cursor:'pointer' }}>
+        Bỏ qua, xem lộ trình ngay
+      </button>
+    </div>
+  );
+}
+
 // ─── Main App ─────────────────────────────────────────────────
 export default function App() {
   const [screen, setScreen] = useState<Screen>('landing');
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [answers, setAnswers] = useState<Record<number,number>>({});
   const [result, setResult] = useState<ScoreResult | null>(null);
+  const [email, setEmail] = useState('');
 
   const handleInfoSubmit = (u: UserInfo) => { setUserInfo(u); setScreen('intro'); };
+
+  // Lưu email + đẩy lead về Sheet (dùng cho cả màn thu email lẫn màn cảm ơn)
+  const saveLead = useCallback(async (em: string) => {
+    setEmail(em);
+    await submitLead({
+      source: 'test-result',
+      name: userInfo?.name ?? '',
+      birthYear: userInfo?.birthYear ?? '',
+      gender: userInfo?.gender ?? '',
+      email: em,
+      the: result?.dominant ?? '',
+      time: new Date().toISOString(),
+    });
+  }, [userInfo, result]);
+
+  const handleCapture = useCallback(async (em: string) => {
+    await saveLead(em);
+    setScreen('roadmap');
+  }, [saveLead]);
 
   const handleTestDone = useCallback((ans: Record<number,number>) => {
     setAnswers(ans);
@@ -1215,16 +1551,19 @@ export default function App() {
   const handleConsent = (yes: boolean) => setScreen(yes ? 'offer' : 'thankyou');
 
   return (
-    <div style={{ background:'var(--cream)', minHeight:'100dvh' }}>
+    <div style={{ background:'var(--page-bg)', minHeight:'100dvh', display:'flex', justifyContent:'center' }}>
+      <div className="w-full max-w-[480px] min-h-[100dvh] md:shadow-[0_10px_60px_rgba(40,20,22,0.08)] md:border-x md:border-[#DCCFB4]/50">
       {screen === 'landing'  && <LandingScreen onStart={() => setScreen('infoform')} />}
       {screen === 'infoform' && <InfoFormScreen onSubmit={handleInfoSubmit} />}
       {screen === 'intro'    && <IntroScreen userInfo={userInfo!} onStart={() => setScreen('test')} />}
       {screen === 'test'     && userInfo && <TestScreen userInfo={userInfo} onDone={handleTestDone} />}
       {screen === 'loading'  && userInfo && <LoadingScreen name={userInfo.name} />}
-      {screen === 'report'   && result && userInfo && <ReportScreen result={result} userInfo={userInfo} onNext={() => setScreen('roadmap')} />}
+      {screen === 'report'   && result && userInfo && <ReportScreen result={result} userInfo={userInfo} onNext={() => setScreen('capture')} />}
+      {screen === 'capture'  && result && userInfo && <EmailCaptureScreen result={result} userInfo={userInfo} onSubmit={handleCapture} onSkip={() => setScreen('roadmap')} />}
       {screen === 'roadmap'  && result && userInfo && <RoadmapScreen result={result} userInfo={userInfo} onConsent={handleConsent} />}
       {screen === 'offer'    && result && userInfo && <OfferScreen result={result} userInfo={userInfo} />}
-      {screen === 'thankyou' && result && userInfo && <ThankYouScreen result={result} userInfo={userInfo} />}
+      {screen === 'thankyou' && result && userInfo && <ThankYouScreen result={result} userInfo={userInfo} capturedEmail={email} onCaptureEmail={saveLead} />}
+      </div>
     </div>
   );
 }
